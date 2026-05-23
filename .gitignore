@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+.astro-dev.*.log
+.astro-preview.*.log
+.static-server.*.log
+.playwright-mcp/
+portfolio-*.png

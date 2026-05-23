@@ -1,0 +1,76 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { interactivePortfolioUrl, projects } from "../../data/portfolio";
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const withBase = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
+const detailParagraphs = Array.isArray(project.detail) ? project.detail : [project.detail];
+---
+
+<BaseLayout title={`${project.title} - Yuuv Jauhari`}>
+  <div class="site-shell detail-shell">
+    <canvas class="pixel-field" id="pixel-field" aria-hidden="true"></canvas>
+    <header class="topbar">
+      <a class="brand" href={withBase("")} aria-label="Back to home">
+        <span class="brand-mark">YJ</span>
+        <span>Yuuv Jauhari</span>
+      </a>
+      <nav class="nav-links" aria-label="Project navigation">
+        <a href={`${withBase("")}#projects`}>Projects</a>
+        <a href={interactivePortfolioUrl} target="_blank" rel="noreferrer">Interactive</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="section-band project-detail">
+        <a class="back-link reveal" href={`${withBase("")}#projects`}>&lt;- Back to projects</a>
+        <p class="section-kicker reveal">{project.eyebrow}</p>
+        <h1 class="detail-title reveal">{project.title}</h1>
+        <p class="detail-summary reveal">{project.summary}</p>
+        <div class="detail-actions reveal">
+          {project.repoUrl && (
+            <a class="button button-primary" href={project.repoUrl} target="_blank" rel="noreferrer">
+              Open Repository
+              <span aria-hidden="true">-&gt;</span>
+            </a>
+          )}
+          {project.externalUrl && (
+            <a class={project.repoUrl ? "button button-secondary" : "button button-primary"} href={project.externalUrl} target="_blank" rel="noreferrer">
+              {project.externalLabel ?? "Open External Link"}
+              <span aria-hidden="true">-&gt;</span>
+            </a>
+          )}
+          <a class="button button-secondary" href={interactivePortfolioUrl} target="_blank" rel="noreferrer">
+            Interactive Portfolio
+          </a>
+        </div>
+      </section>
+
+      <section class="section-band detail-grid">
+        <article class="detail-block reveal">
+          <h2>Overview</h2>
+          {detailParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+        </article>
+        <article class="detail-block reveal">
+          <h2>Highlights</h2>
+          <ul>
+            {project.impact.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+        <article class="detail-block reveal">
+          <h2>Stack</h2>
+          <ul class="tag-list tag-list-large">
+            {project.stack.map((tag) => <li>{tag}</li>)}
+          </ul>
+        </article>
+      </section>
+    </main>
+  </div>
+</BaseLayout>

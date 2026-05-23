@@ -1,0 +1,14 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const withBase = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
+---
+
+<BaseLayout title="404 - Yuuv Jauhari">
+  <main class="not-found">
+    <p class="section-kicker">system / missing route</p>
+    <h1>404</h1>
+    <p>This page did not load into the map.</p>
+    <a class="button button-primary" href={withBase("")}>Return Home</a>
+  </main>
+</BaseLayout>

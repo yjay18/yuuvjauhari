@@ -1,0 +1,33 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Yuuv Jauhari - AI / ML Portfolio",
+  description = "Portfolio of Yuuv Jauhari, software engineer and AI/ML researcher focused on NLP, multi-agent systems, clinical ML, and applied AI.",
+} = Astro.props;
+
+const withBase = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080604" />
+    <link rel="icon" href={withBase("favicon.svg")} type="image/svg+xml" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+    <script>
+      import "../scripts/site";
+    </script>
+  </body>
+</html>

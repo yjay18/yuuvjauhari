@@ -1,0 +1,184 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const withBase = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
+
+const amberTheme = {
+  bg: "#080604",
+  soft: "#120d08",
+  panel: "#181009",
+  text: "#fff4d6",
+  muted: "#b8a98b",
+  line: "#ffb000",
+  accent: "#ffb000",
+  secondary: "#9dff7a",
+  tertiary: "#ff6b35",
+  danger: "#ff3b30",
+};
+
+const cssVars = `--mock-bg: ${amberTheme.bg}; --mock-soft: ${amberTheme.soft}; --mock-panel: ${amberTheme.panel}; --mock-text: ${amberTheme.text}; --mock-muted: ${amberTheme.muted}; --mock-line: ${amberTheme.line}; --mock-accent: ${amberTheme.accent}; --mock-secondary: ${amberTheme.secondary}; --mock-tertiary: ${amberTheme.tertiary}; --mock-danger: ${amberTheme.danger};`;
+
+const backgroundVariants = [
+  {
+    name: "Scanline Drift",
+    tag: "classic crt movement",
+    previewClass: "variant-scanline",
+    summary:
+      "Slow amber scanlines slide over a dark terminal grid. This is the safest option: distinctive, readable, and very light.",
+    motion: "constant subtle drift",
+    adapts: "low",
+  },
+  {
+    name: "Cursor Heat Bloom",
+    tag: "user-reactive glow",
+    previewClass: "variant-cursor",
+    summary:
+      "The warm glow follows the cursor inside each panel, like an old monitor phosphor bloom reacting to attention.",
+    motion: "pointer-adaptive",
+    adapts: "high",
+  },
+  {
+    name: "Signal Sweep Grid",
+    tag: "diagnostic machine panel",
+    previewClass: "variant-sweep",
+    summary:
+      "A thin light sweep travels across a technical grid. It feels like a machine checking the profile screen.",
+    motion: "timed sweep",
+    adapts: "medium",
+  },
+  {
+    name: "Pixel Dust",
+    tag: "retro starfield",
+    previewClass: "variant-pixel-dust",
+    summary:
+      "Sparse amber pixels flicker and drift behind the content. It nods to games without making the page too playful.",
+    motion: "ambient particles",
+    adapts: "medium",
+  },
+  {
+    name: "Data Cartridge",
+    tag: "save-file memory board",
+    previewClass: "variant-cartridge",
+    summary:
+      "Blocky data lanes and small memory cells shift like a cartridge readout. Good if you want stronger pixel identity.",
+    motion: "stepped pixel shifts",
+    adapts: "medium",
+  },
+  {
+    name: "Oscilloscope Wave",
+    tag: "research instrument",
+    previewClass: "variant-wave",
+    summary:
+      "A warm signal band moves behind the hero like lab equipment output. This reads more research/robotics than arcade.",
+    motion: "soft wave pulse",
+    adapts: "low",
+  },
+];
+---
+
+<BaseLayout title="Amber CRT Background Mockups - Yuuv Jauhari">
+  <main class="mockup-page amber-mockup-page" style={cssVars}>
+    <header class="mockup-header amber-mockup-header">
+      <a class="mockup-back" href={withBase("")}>&lt;- Back to portfolio</a>
+      <p class="section-kicker">amber crt / background lab</p>
+      <h1>Amber CRT Backgrounds</h1>
+      <p>
+        The main portfolio is untouched. This page keeps the Amber CRT palette fixed and compares background systems:
+        static texture, moving scanlines, cursor-reactive glow, and more game-like pixel motion.
+      </p>
+    </header>
+
+    <section class="amber-palette-panel" aria-label="Selected Amber CRT palette">
+      <div>
+        <p class="theme-tag">selected direction</p>
+        <h2>Amber CRT</h2>
+        <p>
+          Warm terminal glass, arcade-monitor glow, cream text, amber interface lines, and small green/red signal colors.
+        </p>
+      </div>
+      <div class="theme-swatches amber-swatches" aria-label="Amber CRT swatches">
+        <span style={`background: ${amberTheme.bg}`}></span>
+        <span style={`background: ${amberTheme.panel}`}></span>
+        <span style={`background: ${amberTheme.accent}`}></span>
+        <span style={`background: ${amberTheme.secondary}`}></span>
+        <span style={`background: ${amberTheme.tertiary}`}></span>
+        <span style={`background: ${amberTheme.danger}`}></span>
+      </div>
+    </section>
+
+    <section class="theme-board background-board" aria-label="Amber CRT background options">
+      {backgroundVariants.map((variant) => (
+        <article class="theme-tile background-tile" style={cssVars}>
+          <div class={`theme-preview bg-preview ${variant.previewClass}`} aria-label={`${variant.name} preview`}>
+            <div class="mini-topbar">
+              <span class="mini-mark">YJ</span>
+              <span>AMBER.OS</span>
+              <span class="mini-status">SIGNAL</span>
+            </div>
+            <div class="mini-hero">
+              <p>PROFILE BOOT / CRT MODE</p>
+              <h2>Hey, I'm Yuuv.</h2>
+              <strong>I am an AI/ML Engineer</strong>
+              <div class="mini-actions">
+                <span>INTERACTIVE MODE</span>
+                <span>CASE FILES</span>
+              </div>
+            </div>
+            <div class="mini-grid">
+              <div class="mini-panel mini-loadout">
+                <span>LOADOUT</span>
+                <i></i>
+                <i></i>
+                <i></i>
+              </div>
+              <div class="mini-panel mini-research">
+                <span>RESEARCH</span>
+                <b></b>
+              </div>
+              <div class="mini-panel mini-card">
+                <span>MISSION LOG</span>
+                <strong>Fresh graduate with distinction</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="theme-info background-info">
+            <p class="theme-tag">{variant.tag}</p>
+            <h2>{variant.name}</h2>
+            <p>{variant.summary}</p>
+            <dl class="theme-values">
+              <div>
+                <dt>Motion</dt>
+                <dd>{variant.motion}</dd>
+              </div>
+              <div>
+                <dt>Adaptive</dt>
+                <dd>{variant.adapts}</dd>
+              </div>
+            </dl>
+          </div>
+        </article>
+      ))}
+    </section>
+  </main>
+
+  <script is:inline>
+    const backgroundTiles = Array.from(document.querySelectorAll(".background-tile"));
+
+    backgroundTiles.forEach((tile) => {
+      tile.addEventListener("pointermove", (event) => {
+        const rect = tile.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+        tile.style.setProperty("--tile-x", `${Math.max(0, Math.min(100, x))}%`);
+        tile.style.setProperty("--tile-y", `${Math.max(0, Math.min(100, y))}%`);
+      });
+
+      tile.addEventListener("pointerleave", () => {
+        tile.style.setProperty("--tile-x", "50%");
+        tile.style.setProperty("--tile-y", "34%");
+      });
+    });
+  </script>
+</BaseLayout>
