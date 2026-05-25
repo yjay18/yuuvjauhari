@@ -11,6 +11,8 @@ import {
 } from "../data/portfolio";
 
 const withBase = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
+const publicationHref = (url: string) =>
+  /^https?:\/\//.test(url) ? url : withBase(url);
 const carouselProjects = [...featuredProjects, ...archiveProjects];
 ---
 
@@ -108,7 +110,7 @@ const carouselProjects = [...featuredProjects, ...archiveProjects];
           {publications.map((pub) => (
             <article class="publication-item reveal">
               <p class="meta">{pub.date}</p>
-              <h3>{pub.url ? <a href={pub.url} target="_blank" rel="noreferrer">{pub.title}</a> : pub.title}</h3>
+              <h3>{pub.url ? <a href={publicationHref(pub.url)} target="_blank" rel="noreferrer">{pub.title}</a> : pub.title}</h3>
               <p>{pub.venue}</p>
             </article>
           ))}
