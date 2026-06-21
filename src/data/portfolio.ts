@@ -6,7 +6,7 @@ export const profile = {
   location: "Dublin, Ireland",
   email: "jauhariyuuv@gmail.com",
   linkedin: "https://www.linkedin.com/in/yuuv-jauhari-66923a168",
-  github: "https://github.com/Yuuv",
+  github: "https://github.com/yjay18",
   headline: "Fresh Computer Science graduate with overall distinction, focused on NLP, machine learning, and applied AI systems.",
   intro:
     "Fresh Integrated MSc Computer Science graduate from Trinity College Dublin with overall distinction and industry experience across NLP pipelines, clinical ML, legal-tech, backend tools, and applied research. I build AI systems that move from prototype to production.",
