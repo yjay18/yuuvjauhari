@@ -1,31 +1,101 @@
 ---
+// Self-hosted fonts (no render-blocking third-party requests).
+import "@fontsource/cormorant-garamond/500.css";
+import "@fontsource/cormorant-garamond/600.css";
+import "@fontsource/cormorant-garamond/600-italic.css";
+import "@fontsource-variable/inter/wght.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
 import "../styles/global.css";
+
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import { profile, targetRoles } from "../data/portfolio";
+import { withBase } from "../lib/links";
 
 interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
 }
 
 const {
-  title = "Yuuv Jauhari - AI / ML Portfolio",
-  description = "Portfolio of Yuuv Jauhari, software engineer and AI/ML researcher focused on NLP, multi-agent systems, clinical ML, and applied AI.",
+  title = "Yuuv Jauhari · AI/ML Engineer · NLP & LLM Systems",
+  description = "AI/ML engineer and Trinity College Dublin MSc graduate building NLP systems, clinical ML pipelines, local-first LLM apps, and multi-agent research. Experience at Quantexa, Oracle, Fathom, BlastAsia, and Propylon.",
+  ogImage = "og.png",
 } = Astro.props;
 
-const withBase = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
+const site = Astro.site ?? new URL("https://yuuvjauhari.github.io");
+const canonical = new URL(Astro.url.pathname, site).href;
+const ogImageUrl = new URL(withBase(ogImage), site).href;
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  url: site.href,
+  image: ogImageUrl,
+  jobTitle: targetRoles.slice(0, 4),
+  description,
+  email: `mailto:${profile.email}`,
+  address: { "@type": "PostalAddress", addressLocality: "Dublin", addressCountry: "IE" },
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "Trinity College Dublin",
+    sameAs: "https://www.tcd.ie/",
+  },
+  knowsAbout: [
+    "Machine Learning",
+    "Natural Language Processing",
+    "Large Language Models",
+    "Multi-agent systems",
+    "Clinical machine learning",
+    "Software engineering",
+  ],
+  sameAs: [profile.github, profile.linkedin, "https://arxiv.org/abs/2510.04368"],
+};
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#080604" />
-    <link rel="icon" href={withBase("favicon.svg")} type="image/svg+xml" />
+    <meta name="theme-color" content="#eef0e6" />
+    <meta name="color-scheme" content="light" />
+
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={profile.name} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={withBase("favicon.svg")} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={withBase("apple-touch-icon.png")} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={profile.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Yuuv Jauhari · AI/ML Engineer, NLP & LLM Systems" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(personSchema)} />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Nav />
     <slot />
+    <Footer />
     <script>
       import "../scripts/site";
     </script>

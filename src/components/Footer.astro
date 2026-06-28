@@ -1,0 +1,32 @@
+---
+import { profile } from "../data/portfolio";
+import { withBase } from "../lib/links";
+import Icon from "./Icon.astro";
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <a class="f-brand" href={withBase("")} aria-label={`${profile.name}, home`}>
+      <span class="brand-mark" aria-hidden="true">Y</span>
+      <span>{profile.name}</span>
+    </a>
+
+    <p class="footer-meta">
+      <span>{profile.location}</span>
+      <span>Last updated {profile.lastUpdated}</span>
+      <span>Built from scratch · Astro</span>
+    </p>
+
+    <div class="footer-social">
+      <a class="icon-btn" href={`mailto:${profile.email}`} aria-label="Email Yuuv">
+        <Icon name="mail" />
+      </a>
+      <a class="icon-btn" href={profile.github} target="_blank" rel="noreferrer" aria-label="GitHub">
+        <Icon name="github" />
+      </a>
+      <a class="icon-btn" href={profile.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
+        <Icon name="linkedin" />
+      </a>
+    </div>
+  </div>
+</footer>

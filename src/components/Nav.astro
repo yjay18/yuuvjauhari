@@ -1,0 +1,67 @@
+---
+import { profile } from "../data/portfolio";
+import { withBase } from "../lib/links";
+import Icon from "./Icon.astro";
+
+const home = withBase("");
+const cv = withBase(profile.cvPath);
+
+const links = [
+  { label: "Work", id: "work" },
+  { label: "Experience", id: "experience" },
+  { label: "Research", id: "research" },
+  { label: "Skills", id: "skills" },
+  { label: "Contact", id: "contact" },
+];
+---
+
+<header class="topbar" id="topbar" data-topbar>
+  <div class="container">
+    <a class="brand" href={home} aria-label={`${profile.name}, home`}>
+      <span class="brand-mark" aria-hidden="true">Y</span>
+      <span class="brand-name">{profile.name}</span>
+    </a>
+
+    <nav class="nav" aria-label="Primary">
+      <div class="nav-links" data-nav-links>
+        {links.map((l) => (
+          <a href={`${home}#${l.id}`} data-nav-link={l.id}>{l.label}</a>
+        ))}
+      </div>
+      <a class="btn btn--primary btn--sm nav-cv desktop" href={cv} target="_blank" rel="noreferrer">
+        <Icon name="download" />
+        CV
+      </a>
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="drawer"
+        data-nav-toggle
+      >
+        <span></span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div class="drawer" id="drawer" data-drawer hidden>
+  <div></div>
+  <div class="drawer-body">
+    {links.map((l, i) => (
+      <a href={`${home}#${l.id}`} data-drawer-link>
+        {l.label}
+        <span class="num">{String(i + 1).padStart(2, "0")}</span>
+      </a>
+    ))}
+    <div class="drawer-cta">
+      <a class="btn btn--primary" href={cv} target="_blank" rel="noreferrer" data-drawer-link>
+        <Icon name="download" /> Download CV
+      </a>
+      <a class="btn btn--secondary" href={`mailto:${profile.email}`} data-drawer-link>
+        <Icon name="mail" /> Email
+      </a>
+    </div>
+  </div>
+</div>

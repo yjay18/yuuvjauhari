@@ -1,205 +1,281 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import FlagshipCard from "../components/FlagshipCard.astro";
+import Icon from "../components/Icon.astro";
 import {
+  archiveFilters,
   archiveProjects,
+  communityHighlights,
+  credibility,
   experience,
-  featuredProjects,
-  interactivePortfolioUrl,
+  flagshipProjects,
   profile,
   publications,
   skillGroups,
+  targetRoles,
 } from "../data/portfolio";
+import { projectHref, resolveUrl, withBase } from "../lib/links";
 
-const withBase = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
-const publicationHref = (url: string) =>
-  /^https?:\/\//.test(url) ? url : withBase(url);
-const carouselProjects = [...featuredProjects, ...archiveProjects];
+const cv = withBase(profile.cvPath);
 ---
 
 <BaseLayout>
-  <div class="site-shell">
-    <canvas class="pixel-field" id="pixel-field" aria-hidden="true"></canvas>
-    <header class="topbar">
-      <a class="brand" href="#top" aria-label="Yuuv Jauhari home">
-        <span class="brand-mark">YJ</span>
-        <span>Yuuv Jauhari</span>
-      </a>
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="#publications">Research</a>
-        <a href="#experience">Experience</a>
-        <a href="#projects">Projects</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </header>
+  <main id="main">
+    <Hero />
 
-    <main id="top">
-      <section class="hero section-band" aria-labelledby="hero-title">
-        <div class="hero-content">
-          <p class="system-line reveal">portfolio.exe / status: online</p>
-          <h1 id="hero-title" class="hero-title reveal">Hey, I'm Yuuv.</h1>
-          <p class="role-line reveal" aria-live="polite">
-            I am <span id="role-typewriter">an AI/ML Engineer</span><span class="type-cursor" aria-hidden="true"></span>
-          </p>
-          <p class="hero-copy reveal">
-            {profile.headline} I work across NLP, LLM systems, clinical ML, backend tooling, and research-heavy products.
-          </p>
-          <div class="hero-actions reveal">
-            <a class="button button-primary" href={interactivePortfolioUrl} target="_blank" rel="noreferrer">
-              Open Demo Site
-              <span aria-hidden="true">-&gt;</span>
-            </a>
-            <a class="button button-secondary" href="#projects">
-              View Projects
-              <span aria-hidden="true">v</span>
-            </a>
-          </div>
+    {/* ---- Credibility strip -------------------------------------------- */}
+    <section class="credibility" aria-label="Credibility">
+      <div class="container">
+        <div class="cred-row reveal">
+          <span class="cred-label">Trusted context</span>
+          {credibility.map((item) =>
+            item.href ? (
+              <a class="cred-item" href={resolveUrl(item.href)} target="_blank" rel="noreferrer">
+                <b>{item.label}</b>
+                {item.note && <span>{item.note}</span>}
+              </a>
+            ) : (
+              <span class="cred-item">
+                <b>{item.label}</b>
+                {item.note && <span>{item.note}</span>}
+              </span>
+            )
+          )}
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="section-band about" id="about" aria-labelledby="about-title">
-        <div class="section-heading reveal">
-          <p class="section-kicker">01 / origin</p>
-          <h2 id="about-title">About</h2>
+    {/* ---- Flagship work ------------------------------------------------ */}
+    <section class="section" id="work" aria-labelledby="work-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="index">01 · Selected work</span>
+          <h2 class="section-title" id="work-title">Flagship projects</h2>
+          <p class="lede">Selected work across research, ML systems, and applied engineering.</p>
         </div>
-        <div class="about-grid">
-          <p class="large-copy reveal">{profile.intro}</p>
-          <div class="quick-facts reveal">
-            <div>
-              <span>Location</span>
-              <strong>{profile.location}</strong>
-            </div>
-            <div>
-              <span>Education</span>
-              <strong>Integrated MSc & BA(Mod.) Computer Science, Trinity College Dublin - Overall Distinction</strong>
-            </div>
-            <div>
-              <span>Focus</span>
-              <strong>NLP, LLMs, ML deployment, simulations, backend systems</strong>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <section class="section-band" id="skills" aria-labelledby="skills-title">
-        <div class="section-heading reveal">
-          <p class="section-kicker">02 / loadout</p>
-          <h2 id="skills-title">Skills</h2>
+        <div class="work-grid">
+          {flagshipProjects.map((project, i) => <FlagshipCard project={project} index={i} />)}
         </div>
-        <div class="skill-grid">
-          {skillGroups.map((group) => (
-            <article class="skill-card reveal" tabindex="0" aria-label={`${group.title} skills`}>
-              <h3>{group.title}</h3>
-              <div class="skill-card-panel">
-                <ul>
-                  {group.skills.map((skill) => <li>{skill}</li>)}
-                </ul>
+      </div>
+    </section>
+
+    {/* ---- Experience --------------------------------------------------- */}
+    <section class="section" id="experience" aria-labelledby="xp-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="index">02 · Track record</span>
+          <h2 class="section-title" id="xp-title">Experience</h2>
+          <p class="lede">Across industry and research.</p>
+        </div>
+
+        <div class="xp-list">
+          {experience.map((xp) => (
+            <article class="xp reveal">
+              <div class="xp-meta">
+                <p class="yr">{xp.year}</p>
+                <p class="co">{xp.company}</p>
+                <p class="pl">{xp.period} · {xp.location}</p>
+              </div>
+              <div class="xp-body">
+                <div class="role-row">
+                  <span class="role">{xp.role}</span>
+                  {xp.tag && <span class="tag">{xp.tag}</span>}
+                </div>
+                <p class="xp-summary">{xp.summary}</p>
               </div>
             </article>
           ))}
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="section-band" id="publications" aria-labelledby="publications-title">
-        <div class="section-heading reveal">
-          <p class="section-kicker">03 / research drops</p>
-          <h2 id="publications-title">Publications</h2>
+    {/* ---- Skills ------------------------------------------------------- */}
+    <section class="section" id="skills" aria-labelledby="skills-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="index">03 · Capabilities</span>
+          <h2 class="section-title" id="skills-title">Skills</h2>
+          <p class="lede">Grouped by area, with the projects where each was applied.</p>
         </div>
-        <div class="publication-list">
-          {publications.map((pub) => (
-            <article class="publication-item reveal">
-              <p class="meta">{pub.date}</p>
-              <h3>{pub.url ? <a href={publicationHref(pub.url)} target="_blank" rel="noreferrer">{pub.title}</a> : pub.title}</h3>
-              <p>{pub.venue}</p>
+
+        <div class="skills-grid">
+          {skillGroups.map((group) => (
+            <article class="skill-card reveal">
+              <h3>{group.title}</h3>
+              <p class="caption">{group.caption}</p>
+              <ul class="tags">
+                {group.skills.map((s) => <li>{s}</li>)}
+              </ul>
+              <div class="applied">
+                <span class="lbl">Applied in</span>
+                {group.appliedIn.map((p) => (
+                  <a href={projectHref(p.slug)}>
+                    {p.label}
+                    <Icon name="arrow-right" class="arrow" />
+                  </a>
+                ))}
+              </div>
             </article>
           ))}
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="section-band" id="experience" aria-labelledby="experience-title">
-        <div class="section-heading reveal">
-          <p class="section-kicker">04 / campaign log</p>
-          <h2 id="experience-title">Experience</h2>
+    {/* ---- Publications ------------------------------------------------- */}
+    <section class="section" id="research" aria-labelledby="research-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="index">04 · Research</span>
+          <h2 class="section-title" id="research-title">Publications</h2>
+          <p class="lede">Peer-reviewed, thesis, and preprint work.</p>
         </div>
-        <div class="experience-sequence reveal">
-          <div class="experience-list">
-            {experience.map((item, index) => (
-              <article
-                class="experience-step"
-                data-experience-step
-                data-index={index}
-                data-title={`${item.role} / ${item.company}`}
-                data-body={item.points.join(" ")}
-              >
-                <div class="experience-marker">
-                  <span>{item.year}</span>
-                  <strong>{item.marker}</strong>
+
+        <div class="pub-list">
+          {publications.map((pub) => {
+            const Tag = pub.url ? "a" : "div";
+            const attrs = pub.url
+              ? { href: resolveUrl(pub.url), target: "_blank", rel: "noreferrer" }
+              : {};
+            return (
+              <Tag class="pub reveal" {...attrs}>
+                <div class="pub-when">
+                  <span>{pub.date}</span>
+                  {pub.status && <span class="status">{pub.status}</span>}
                 </div>
-                <div class="experience-terminal">
-                  <p class="meta">{item.period} / {item.location}</p>
-                  <h3>{item.role}</h3>
-                  <p class="company">{item.company}</p>
-                  <p class="experience-typed" data-experience-typed>{item.points[0]}</p>
+                <div class="pub-main">
+                  <h3>{pub.title}</h3>
+                  {pub.subtitle && <p>{pub.subtitle}</p>}
+                  <p class="venue">{pub.venue}</p>
                 </div>
-              </article>
+                {pub.url && <Icon name="arrow-up-right" class="pub-go" />}
+              </Tag>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
+    {/* ---- Archive ------------------------------------------------------ */}
+    <section class="section" id="archive" aria-labelledby="archive-title">
+      <div class="container">
+        <div class="archive-head reveal">
+          <div class="section-head" style="margin-bottom:0">
+            <span class="index">05 · More work</span>
+            <h2 class="section-title" id="archive-title">Project archive</h2>
+            <p class="lede">Other projects, experiments, and community work.</p>
+          </div>
+          <div class="filters" role="group" aria-label="Filter projects" data-filters>
+            {archiveFilters.map((f, i) => (
+              <button class="filter" type="button" data-filter={f} aria-pressed={i === 0 ? "true" : "false"}>
+                {f}
+              </button>
             ))}
           </div>
         </div>
-      </section>
 
-      <section class="section-band" id="projects" aria-labelledby="projects-title">
-        <div class="section-heading reveal">
-          <p class="section-kicker">05 / selected quests</p>
-          <h2 id="projects-title">Projects</h2>
+        <div class="archive-grid" data-archive>
+          {archiveProjects.map((p) => (
+            <a class="acard reveal" href={projectHref(p.slug)} data-cats={p.categories.join("|")}>
+              <span class="ac-eyebrow">{p.eyebrow}</span>
+              <h3>{p.title}</h3>
+              <p>{p.subtitle ?? p.summary}</p>
+              <span class="ac-foot">
+                <span>{p.categories[0]}</span>
+                <span class="go">Case study →</span>
+              </span>
+            </a>
+          ))}
+          {communityHighlights.map((c) => (
+            <div class="acard acard--static reveal" data-cats={c.categories.join("|")}>
+              <span class="ac-eyebrow">{c.eyebrow}</span>
+              <h3>{c.title}</h3>
+              <p>{c.summary}</p>
+              <span class="ac-foot">
+                <span>{c.period}</span>
+                <span>{c.categories[0]}</span>
+              </span>
+            </div>
+          ))}
+          <p class="archive-empty" data-archive-empty hidden>No projects in this category.</p>
         </div>
-        <div class="project-stack reveal" data-project-stack data-featured-count={featuredProjects.length}>
-          <button class="project-nav project-nav-prev" type="button" aria-label="Previous project" data-project-prev>
-            <span aria-hidden="true">&lt;</span>
-          </button>
-          <div class="project-stack-viewport" aria-live="polite">
-            {carouselProjects.map((project, index) => (
-              <a
-                class="project-card project-stack-card"
-                href={withBase(`projects/${project.slug}/`)}
-                aria-label={`Open ${project.title} project`}
-                data-project-card
-                data-index={index}
-              >
-                <span class="project-eyebrow">{project.eyebrow}</span>
-                <h3>{project.title}</h3>
-                <p>{project.summary}</p>
-                <ul class="tag-list">
-                  {project.stack.slice(0, 4).map((tag) => <li>{tag}</li>)}
-                </ul>
-                <span class="card-link">Open case file -&gt;</span>
-              </a>
-            ))}
-          </div>
-          <button class="project-nav project-nav-next" type="button" aria-label="Next project" data-project-next>
-            <span aria-hidden="true">&gt;</span>
-          </button>
-          <p class="project-stack-status" data-project-status>01 / {featuredProjects.length.toString().padStart(2, "0")}</p>
-        </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="section-band contact" id="contact" aria-labelledby="contact-title">
-        <div class="section-heading reveal">
-          <p class="section-kicker">06 / connect</p>
-          <h2 id="contact-title">Contact</h2>
-        </div>
-        <div class="contact-grid reveal">
+    {/* ---- Contact ------------------------------------------------------ */}
+    <section class="section" id="contact" aria-labelledby="contact-title">
+      <div class="container contact-grid">
+        <div class="contact-lead reveal">
+          <span class="eyebrow">06 · Contact</span>
+          <h2 id="contact-title" style="margin-top:0.9rem">
+            Interested in systems that are both <span class="accent-word">researched</span> and built?
+          </h2>
           <p>
-            I am open to AI/ML engineering, NLP, research engineering, and software roles where rigorous models meet usable systems.
+            I'm open to roles across AI/ML, NLP, and LLM systems, as well as software engineering
+            more generally, where I can contribute from research and evaluation through to production.
           </p>
           <div class="contact-actions">
-            <a class="button button-primary" href={`mailto:${profile.email}`}>Email</a>
-            <a class="button button-secondary" href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-            <a class="button button-secondary" href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
-            <a class="button button-ghost" href={interactivePortfolioUrl} target="_blank" rel="noreferrer">Demo Site</a>
+            <a class="btn btn--primary" href={`mailto:${profile.email}`}>
+              <Icon name="mail" /> Email me
+            </a>
+            <button class="btn btn--secondary copy-mail" type="button" data-copy={profile.email}>
+              <Icon name="copy" /> Copy email
+            </button>
+            <span class="copy-ok" data-copy-ok aria-live="polite"></span>
+            <a class="btn btn--secondary" href={cv} target="_blank" rel="noreferrer">
+              <Icon name="download" /> Download CV
+            </a>
           </div>
         </div>
-      </section>
-    </main>
-  </div>
+
+        <aside class="recruiter reveal" aria-label="Recruiter summary">
+          <div class="recruiter-head">
+            <span class="rh-title">Recruiter summary</span>
+            <span class="avail">{profile.availability}</span>
+          </div>
+          <dl>
+            <div>
+              <dt>Roles</dt>
+              <dd>
+                <div class="roles">
+                  {targetRoles.map((r) => <span>{r}</span>)}
+                </div>
+              </dd>
+            </div>
+            <div>
+              <dt>Location</dt>
+              <dd>{profile.location}</dd>
+            </div>
+            <div>
+              <dt>Degree</dt>
+              <dd>{profile.degree} · {profile.degreeNote}</dd>
+            </div>
+            <div>
+              <dt>Email</dt>
+              <dd><a href={`mailto:${profile.email}`}>{profile.email}</a></dd>
+            </div>
+            <div>
+              <dt>Updated</dt>
+              <dd>{profile.lastUpdated}</dd>
+            </div>
+          </dl>
+          <div class="recruiter-actions">
+            <a class="btn btn--primary" href={cv} target="_blank" rel="noreferrer">
+              <Icon name="download" /> CV
+            </a>
+            <a class="btn btn--secondary" href={`mailto:${profile.email}`}>
+              <Icon name="mail" /> Email
+            </a>
+            <a class="btn btn--secondary" href={profile.github} target="_blank" rel="noreferrer">
+              <Icon name="github" /> GitHub
+            </a>
+            <a class="btn btn--secondary" href={profile.linkedin} target="_blank" rel="noreferrer">
+              <Icon name="linkedin" /> LinkedIn
+            </a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
 </BaseLayout>

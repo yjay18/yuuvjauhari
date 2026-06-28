@@ -1,0 +1,98 @@
+---
+import { profile } from "../data/portfolio";
+import { withBase } from "../lib/links";
+import Icon from "./Icon.astro";
+
+const cv = withBase(profile.cvPath);
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow hero-role reveal">{profile.role}</p>
+
+      <h1 id="hero-title" class="hero-title reveal">
+        I build AI systems that move from research prototypes to
+        <span class="accent-word">usable</span> products.
+      </h1>
+
+      <p class="hero-sub reveal">
+        Integrated MSc Computer Science graduate from
+        <strong>Trinity College Dublin</strong> with distinction, focused on practical,
+        production-minded engineering.
+      </p>
+
+      <div class="hero-actions reveal">
+        <a class="btn btn--primary" href={withBase("#work")}>
+          View flagship projects
+          <Icon name="arrow-right" class="arrow" />
+        </a>
+        <a class="btn btn--secondary" href={cv} target="_blank" rel="noreferrer">
+          <Icon name="download" />
+          Download CV
+        </a>
+        <span class="hero-social">
+          <a class="icon-btn" href={`mailto:${profile.email}`} aria-label="Email Yuuv">
+            <Icon name="mail" />
+          </a>
+          <a class="icon-btn" href={profile.github} target="_blank" rel="noreferrer" aria-label="GitHub">
+            <Icon name="github" />
+          </a>
+          <a class="icon-btn" href={profile.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
+            <Icon name="linkedin" />
+          </a>
+        </span>
+      </div>
+    </div>
+
+    <figure class="artifact reveal" aria-labelledby="artifact-cap">
+      <div class="artifact-badge" aria-hidden="true">
+        <span class="glyph"><Icon name="file" /></span>
+        <div>
+          <b>COLM 2025</b>
+          <span>Accepted · NegotiationGym</span>
+        </div>
+      </div>
+
+      <div class="artifact-panel">
+        <div class="artifact-head">
+          <span>ICU Hypotension EWS · evaluation</span>
+          <span class="live">live</span>
+        </div>
+
+        <div class="roc-wrap">
+          <div class="roc-title"><span>ROC · held-out ICU stays</span><b>AUROC 0.945</b></div>
+          <svg class="roc" viewBox="0 0 260 150" aria-hidden="true" role="presentation">
+            <line class="grid-line" x1="8" y1="41.5" x2="252" y2="41.5" />
+            <line class="grid-line" x1="8" y1="75" x2="252" y2="75" />
+            <line class="grid-line" x1="8" y1="108.5" x2="252" y2="108.5" />
+            <line class="grid-line" x1="69" y1="8" x2="69" y2="142" />
+            <line class="grid-line" x1="130" y1="8" x2="130" y2="142" />
+            <line class="grid-line" x1="191" y1="8" x2="191" y2="142" />
+            <line class="ref" x1="8" y1="142" x2="252" y2="8" />
+            <path class="area" d="M8,142 C12,96 16,52 30,30 C44,14 70,12 110,10 C160,9 210,8 252,8 L252,142 Z" />
+            <path class="curve" d="M8,142 C12,96 16,52 30,30 C44,14 70,12 110,10 C160,9 210,8 252,8" />
+            <circle class="op" cx="34" cy="22" r="4.5" />
+          </svg>
+        </div>
+
+        <div class="artifact-metrics">
+          <div><span class="val">0.945</span><span class="lab">AUROC</span></div>
+          <div><span class="val">93.75%</span><span class="lab">recall @ 10% alarm</span></div>
+          <div><span class="val">94,259</span><span class="lab">ICU stays</span></div>
+        </div>
+
+        <div class="artifact-code" aria-hidden="true">
+          <span class="prompt">›</span>
+          <span><span class="tok">gpu</span>.evict(llm) → tts.synthesize() → <span class="tok">gpu</span>.release()</span>
+        </div>
+      </div>
+
+      <figcaption id="artifact-cap" class="sr-only">
+        Evidence panel: a clinical ML evaluation readout (AUROC 0.945, 93.75% recall at a 10%
+        alarm budget across 94,259 ICU stays), a COLM 2025 accepted-paper badge, and a PersonaForge
+        on-device GPU-coordination code line.
+      </figcaption>
+    </figure>
+  </div>
+</section>

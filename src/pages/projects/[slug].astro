@@ -1,76 +1,184 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { interactivePortfolioUrl, projects } from "../../data/portfolio";
+import Icon from "../../components/Icon.astro";
+import { projects, profile } from "../../data/portfolio";
+import { projectHref, resolveUrl, withBase } from "../../lib/links";
 
 export function getStaticPaths() {
-  return projects.map((project) => ({
+  return projects.map((project, i) => ({
     params: { slug: project.slug },
-    props: { project },
+    props: {
+      project,
+      prev: projects[(i - 1 + projects.length) % projects.length],
+      next: projects[(i + 1) % projects.length],
+    },
   }));
 }
 
-const { project } = Astro.props;
-const withBase = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
-const detailParagraphs = Array.isArray(project.detail) ? project.detail : [project.detail];
+const { project, prev, next } = Astro.props;
+const detailParas = Array.isArray(project.detail) ? project.detail : [project.detail];
+const hasStructured = Boolean(project.problem || project.build || project.architecture);
+const linkIcon = (kind: string) =>
+  kind === "repo" ? "github" : kind === "paper" || kind === "thesis" || kind === "writeup" ? "file" : "arrow-up-right";
+
+const title = `${project.title} · ${profile.name}`;
+const description = project.subtitle ?? project.summary;
 ---
 
-<BaseLayout title={`${project.title} - Yuuv Jauhari`}>
-  <div class="site-shell detail-shell">
-    <canvas class="pixel-field" id="pixel-field" aria-hidden="true"></canvas>
-    <header class="topbar">
-      <a class="brand" href={withBase("")} aria-label="Back to home">
-        <span class="brand-mark">YJ</span>
-        <span>Yuuv Jauhari</span>
-      </a>
-      <nav class="nav-links" aria-label="Project navigation">
-        <a href={`${withBase("")}#projects`}>Projects</a>
-        <a href={interactivePortfolioUrl} target="_blank" rel="noreferrer">Demo Site</a>
-      </nav>
-    </header>
+<BaseLayout title={title} description={description}>
+  <main id="main">
+    <section class="section case-hero">
+      <div class="container">
+        <a class="back-link reveal" href={withBase("#work")}>
+          <Icon name="arrow-left" class="arrow" /> All work
+        </a>
 
-    <main>
-      <section class="section-band project-detail">
-        <a class="back-link reveal" href={`${withBase("")}#projects`}>&lt;- Back to projects</a>
-        <p class="section-kicker reveal">{project.eyebrow}</p>
-        <h1 class="detail-title reveal">{project.title}</h1>
-        <p class="detail-summary reveal">{project.summary}</p>
-        <div class="detail-actions reveal">
-          {project.repoUrl && (
-            <a class="button button-primary" href={project.repoUrl} target="_blank" rel="noreferrer">
-              Open Repository
-              <span aria-hidden="true">-&gt;</span>
-            </a>
+        <p class="eyebrow case-eyebrow reveal">{project.eyebrow}</p>
+        <h1 class="case-title reveal">{project.title}</h1>
+        <p class="case-sub reveal">{project.subtitle ?? project.summary}</p>
+
+        {project.roleFit && (
+          <ul class="case-rolefit reveal" aria-label="Role fit">
+            {project.roleFit.map((r) => <li class="chip chip--role">{r}</li>)}
+          </ul>
+        )}
+
+        {project.links && (
+          <div class="case-actions reveal">
+            {project.links.map((link, i) => (
+              <a
+                class={`btn ${i === 0 ? "btn--primary" : "btn--secondary"}`}
+                href={resolveUrl(link.url)}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Icon name={linkIcon(link.kind)} />
+                {link.label}
+              </a>
+            ))}
+          </div>
+        )}
+
+        {project.metrics && (
+          <div class="case-metrics reveal">
+            {project.metrics.map((m) => (
+              <div>
+                <div class="v">{m.value}</div>
+                <div class="l">{m.label}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container case-body">
+        <div class="case-main">
+          <div class="case-block reveal">
+            <h2>Overview</h2>
+            {detailParas.map((p) => <p>{p}</p>)}
+          </div>
+
+          {project.problem && (
+            <div class="case-block reveal">
+              <h2>Problem</h2>
+              <p>{project.problem}</p>
+            </div>
           )}
-          {project.externalUrl && (
-            <a class={project.repoUrl ? "button button-secondary" : "button button-primary"} href={project.externalUrl} target="_blank" rel="noreferrer">
-              {project.externalLabel ?? "Open External Link"}
-              <span aria-hidden="true">-&gt;</span>
-            </a>
+
+          {project.constraints && (
+            <div class="case-block reveal">
+              <h2>Constraints</h2>
+              <ul>{project.constraints.map((c) => <li>{c}</li>)}</ul>
+            </div>
           )}
-          <a class="button button-secondary" href={interactivePortfolioUrl} target="_blank" rel="noreferrer">
-            Demo Site
-          </a>
+
+          {project.build && (
+            <div class="case-block reveal">
+              <h2>What I built</h2>
+              <ul>{project.build.map((b) => <li>{b}</li>)}</ul>
+            </div>
+          )}
+
+          {project.architecture && (
+            <div class="case-block reveal">
+              <h2>Architecture</h2>
+              <ul>{project.architecture.map((a) => <li>{a}</li>)}</ul>
+            </div>
+          )}
+
+          {project.decisions && (
+            <div class="case-block reveal">
+              <h2>Key implementation decisions</h2>
+              <div class="decisions">
+                {project.decisions.map((d) => (
+                  <div class="decision">
+                    <h3>{d.title}</h3>
+                    <p>{d.body}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {project.evaluation && (
+            <div class="case-block reveal">
+              <h2>Evaluation &amp; impact</h2>
+              <ul>{project.evaluation.map((e) => <li>{e}</li>)}</ul>
+            </div>
+          )}
+
+          {!hasStructured && project.impact && (
+            <div class="case-block reveal">
+              <h2>Highlights</h2>
+              <ul>{project.impact.map((e) => <li>{e}</li>)}</ul>
+            </div>
+          )}
+
+          {project.improvements && (
+            <div class="case-block reveal">
+              <h2>What I'd improve next</h2>
+              <ul>{project.improvements.map((e) => <li>{e}</li>)}</ul>
+            </div>
+          )}
         </div>
-      </section>
 
-      <section class="section-band detail-grid">
-        <article class="detail-block reveal">
-          <h2>Overview</h2>
-          {detailParagraphs.map((paragraph) => <p>{paragraph}</p>)}
-        </article>
-        <article class="detail-block reveal">
-          <h2>Highlights</h2>
-          <ul>
-            {project.impact.map((item) => <li>{item}</li>)}
-          </ul>
-        </article>
-        <article class="detail-block reveal">
-          <h2>Stack</h2>
-          <ul class="tag-list tag-list-large">
-            {project.stack.map((tag) => <li>{tag}</li>)}
-          </ul>
-        </article>
-      </section>
-    </main>
-  </div>
+        <aside class="case-aside reveal">
+          <div class="aside-block">
+            <h4>Stack</h4>
+            <ul class="tags">{project.stack.map((s) => <li>{s}</li>)}</ul>
+          </div>
+          {project.links && (
+            <div class="aside-block">
+              <h4>Links</h4>
+              <div class="links-list">
+                {project.links.map((link) => (
+                  <a href={resolveUrl(link.url)} target="_blank" rel="noreferrer">
+                    <Icon name={linkIcon(link.kind)} /> {link.label}
+                  </a>
+                ))}
+                <a href={withBase(profile.cvPath)} target="_blank" rel="noreferrer">
+                  <Icon name="download" /> Download CV
+                </a>
+              </div>
+            </div>
+          )}
+        </aside>
+      </div>
+
+      <div class="container">
+        <nav class="case-nav" aria-label="More projects">
+          <a class="prev" href={projectHref(prev.slug)}>
+            <span>← Previous</span>
+            <b>{prev.title}</b>
+          </a>
+          <a class="next" href={projectHref(next.slug)}>
+            <span>Next →</span>
+            <b>{next.title}</b>
+          </a>
+        </nav>
+      </div>
+    </section>
+  </main>
 </BaseLayout>

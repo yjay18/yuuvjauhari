@@ -1,0 +1,50 @@
+---
+import type { Project } from "../data/portfolio";
+import { projectHref, resolveUrl } from "../lib/links";
+import Icon from "./Icon.astro";
+
+interface Props {
+  project: Project;
+  index: number;
+}
+const { project, index } = Astro.props;
+
+const proof = (project.evaluation ?? project.build ?? project.impact ?? []).slice(0, 4);
+const linkIcon = (kind: string) =>
+  kind === "repo" ? "github" : kind === "paper" || kind === "thesis" || kind === "writeup" ? "file" : "arrow-up-right";
+---
+
+<article class="pcard reveal">
+  <div class="pcard-head">
+    <span class="pcard-index">{String(index + 1).padStart(2, "0")} · {project.eyebrow}</span>
+    <h3>{project.title}</h3>
+    <p class="pcard-sub">{project.subtitle ?? project.summary}</p>
+    {project.roleFit && (
+      <ul class="rolefit" aria-label="Role fit">
+        {project.roleFit.map((r) => <li class="chip chip--role">{r}</li>)}
+      </ul>
+    )}
+  </div>
+
+  <div class="pcard-body">
+    <ul class="pcard-proof">
+      {proof.map((p) => <li>{p}</li>)}
+    </ul>
+    <ul class="tags" aria-label="Stack">
+      {project.stack.slice(0, 6).map((s) => <li>{s}</li>)}
+    </ul>
+  </div>
+
+  <div class="pcard-links">
+    <a class="case-link" href={projectHref(project.slug)}>
+      Read case study
+      <Icon name="arrow-right" class="arrow" />
+    </a>
+    {project.links?.map((link) => (
+      <a class="ext-link" href={resolveUrl(link.url)} target="_blank" rel="noreferrer">
+        <Icon name={linkIcon(link.kind)} />
+        {link.label}
+      </a>
+    ))}
+  </div>
+</article>

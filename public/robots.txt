@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yuuvjauhari.github.io/sitemap-index.xml

@@ -1,14 +1,19 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-
-const withBase = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
+import Icon from "../components/Icon.astro";
+import { withBase } from "../lib/links";
 ---
 
-<BaseLayout title="404 - Yuuv Jauhari">
-  <main class="not-found">
-    <p class="section-kicker">system / missing route</p>
-    <h1>404</h1>
-    <p>This page did not load into the map.</p>
-    <a class="button button-primary" href={withBase("")}>Return Home</a>
+<BaseLayout title="Page not found · Yuuv Jauhari">
+  <main id="main" class="notfound">
+    <div>
+      <p class="eyebrow" style="justify-content:center">Error 404</p>
+      <p class="code serif">Not found</p>
+      <p>That page doesn't exist. The portfolio, projects, and research all live on the home page.</p>
+      <a class="btn btn--primary" href={withBase("")}>
+        Return home
+        <Icon name="arrow-right" class="arrow" />
+      </a>
+    </div>
   </main>
 </BaseLayout>
