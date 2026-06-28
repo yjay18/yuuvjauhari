@@ -8,7 +8,7 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/yuuv-jauhari-66923a168",
   github: "https://github.com/yjay18",
   githubHandle: "yjay18",
-  role: "Software Engineer,
+  role: "Software Engineer · Data Scientist",
   shortPitch:
     "Software Engineer with experience in Data Science, AI/ML Systems and Integration and Research",
   headline: "I build code that moves from research prototypes to usable products.",
