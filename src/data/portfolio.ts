@@ -8,10 +8,10 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/yuuv-jauhari-66923a168",
   github: "https://github.com/yjay18",
   githubHandle: "yjay18",
-  role: "AI/ML Engineer · NLP & LLM Systems",
+  role: "Software Engineer,
   shortPitch:
-    "AI/ML engineer building NLP systems, clinical ML pipelines, and local-first LLM products.",
-  headline: "I build AI systems that move from research prototypes to usable products.",
+    "Software Engineer with experience in Data Science, AI/ML Systems and Integration and Research",
+  headline: "I build code that moves from research prototypes to usable products.",
   degree: "Integrated MSc Computer Science, Trinity College Dublin",
   degreeNote: "Overall distinction",
   availability: "Open to new roles",
