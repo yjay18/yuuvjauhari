@@ -470,18 +470,19 @@ export const projects: Project[] = [
   {
     slug: "interactive-portfolio",
     title: "Interactive Portfolio",
-    eyebrow: "Live Demo",
-    subtitle: "An earlier, animated single-page version of this portfolio.",
+    eyebrow: "Animated 2D World",
+    subtitle: "A side-scrolling town where each building is a project, with in-world product demos and sprites.",
     summary:
-      "An earlier interactive, animated single-page version of this portfolio, built as a standalone web app and deployed on Vercel.",
+      "A playable portfolio built as an animated 2D side-scrolling town. Each building is a project, complete with in-world product demos and pixel sprites.",
     flagship: true,
     categories: ["Web"],
-    roleFit: ["Web", "Frontend"],
+    roleFit: ["Frontend", "Creative / Interactive"],
     detail:
-      "An earlier interactive version of this portfolio, built as an animated single-page web app and deployed on Vercel. This static site is the current, primary version.",
-    stack: ["Web", "Single-page app", "Vercel"],
+      "An earlier, more playful take on this portfolio, built as an animated 2D side-scrolling town. Each project is its own building you can walk to, complete with in-world product demos and pixel sprites. Deployed on Vercel; this static site is the current, primary version.",
+    stack: ["Web", "2D side-scroller", "Sprite art", "Animation"],
     impact: [
-      "Animated, single-page interactive portfolio.",
+      "Built as an animated 2D side-scrolling town, with a building for each project.",
+      "In-world product demos and pixel sprites you can explore.",
       "Deployed on Vercel.",
     ],
     externalUrl: "https://portfolio-website-lake-zeta-65.vercel.app/",
