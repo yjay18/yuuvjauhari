@@ -252,6 +252,8 @@ export type Project = {
   evaluation?: string[];
   improvements?: string[];
   links?: ProjectLink[];
+  // When set, the card links straight to this URL and no case-study page is generated.
+  externalUrl?: string;
 };
 
 export const projects: Project[] = [
@@ -272,20 +274,20 @@ export const projects: Project[] = [
       { value: "94,259", label: "ICU stays modeled" },
     ],
     detail:
-      "A clinical machine-learning pipeline for hourly hypotension early warning across 94,259 ICU stays. The work diagnosed a deployment failure caused by globally calibrated thresholds during MAP-absent hours and proposed subset-calibrated dual thresholds to restore practical recall.",
+      "A clinical machine-learning pipeline for hourly hypotension early warning across 94,259 ICU stays. The work diagnosed a deployment failure where globally calibrated alarm thresholds produced zero recall during MAP-absent hours (53% of patient-hours), and proposed subset-calibrated dual thresholds that recover 93.75% recall at a 10% alarm burden.",
     stack: ["Python", "MIMIC-IV", "Clinical ML", "Threshold calibration", "AUROC analysis", "scikit-learn"],
     problem:
-      "An hourly hypotension early-warning model can score well offline yet fail in practice. Here, globally calibrated alarm thresholds collapsed during hours when mean arterial pressure (MAP) was missing, exactly when a warning matters most.",
+      "An hourly hypotension early-warning model can score well offline yet fail in practice. Here, globally calibrated alarm thresholds produced zero recall during the hours when mean arterial pressure (MAP) was missing, which are 53% of all patient-hours, exactly when a warning still matters.",
     constraints: [
       "Evaluated under a fixed alarm budget (10%), not just raw AUROC, to reflect what clinicians can tolerate.",
       "Hourly prediction cadence across 94,259 MIMIC-IV v3.1 ICU stays.",
-      "Must remain useful during MAP-absent hours, where a single global threshold degraded recall.",
+      "Must stay useful during MAP-absent hours, which are 53% of patient-hours and where a single global threshold gave zero recall.",
     ],
     build: [
       "Built an hourly hypotension early-warning pipeline over 94,259 MIMIC-IV v3.1 ICU stays.",
       "Reached AUROC 0.945 on the warning task.",
-      "Diagnosed a deployment failure caused by globally calibrated thresholds during MAP-absent hours.",
-      "Proposed subset-calibrated dual thresholds to restore practical recall.",
+      "Diagnosed a deployment failure where globally calibrated thresholds gave zero recall during MAP-absent hours (53% of patient-hours).",
+      "Proposed subset-calibrated dual thresholds, recovering 93.75% recall at a 10% alarm burden.",
     ],
     decisions: [
       {
@@ -294,7 +296,7 @@ export const projects: Project[] = [
       },
       {
         title: "Diagnose and fix the MAP-absent failure",
-        body: "A single global threshold degraded recall precisely during hours when MAP was unavailable. Subset-calibrated dual thresholds restored recall to 93.75% at the same alarm burden.",
+        body: "A single global threshold gave zero recall precisely during MAP-absent hours, which are 53% of patient-hours. Subset-calibrated dual thresholds restored recall to 93.75% at the same 10% alarm burden.",
       },
     ],
     evaluation: [
@@ -347,13 +349,13 @@ export const projects: Project[] = [
   {
     slug: "cloud-builder",
     title: "Cloud Builder",
-    eyebrow: "Backend Tooling",
+    eyebrow: "Cloud Tooling",
     subtitle: "A CLI that deploys and manages AWS infrastructure from a handful of configuration lines.",
     summary:
       "A CLI tool for deploying and managing AWS infrastructure from compact configuration, selected for the Software Engineering Industry Awards and later open-sourced.",
     flagship: true,
-    categories: ["Backend"],
-    roleFit: ["Software Engineering", "Backend / Cloud"],
+    categories: ["Systems"],
+    roleFit: ["Software Engineering", "Systems / Cloud"],
     detail:
       "Built during Trinity College Dublin's Software Engineering Industry Programme with Fathom. Cloud Builder deploys and manages AWS infrastructure in seconds using a handful of configuration lines.",
     stack: ["Python", "CLI", "AWS", "Infrastructure", "Developer tools"],
@@ -372,7 +374,7 @@ export const projects: Project[] = [
     summary:
       "An end-to-end ETL and ML system over 1,000+ legal documents that improved bill-outcome accuracy from 45% to 65%+ with XGBoost.",
     flagship: true,
-    categories: ["AI/ML", "Backend"],
+    categories: ["AI/ML"],
     roleFit: ["AI/ML Engineer", "Software Engineering"],
     detail:
       "Built an end-to-end ETL and machine-learning system for Propylon using more than 1,000 legal documents. The system combined text classification with regression modeling to predict whether a legal bill would pass.",
@@ -393,7 +395,7 @@ export const projects: Project[] = [
     summary:
       "A local-first desktop AI chat app with three switchable personas, on-device voice cloning, and DuckDuckGo web search. Built with React, FastAPI, Ollama, Electron, and Coqui XTTS v2.",
     flagship: true,
-    categories: ["AI/ML", "NLP"],
+    categories: ["AI/ML", "NLP", "Systems"],
     roleFit: ["LLM / Applied AI", "Software Engineering", "AI Systems"],
     metrics: [
       { value: "8 GB", label: "shared VRAM, LLM + TTS" },
@@ -466,6 +468,25 @@ export const projects: Project[] = [
     links: [{ label: "View on GitHub", url: "https://github.com/yjay18/personaforge", kind: "repo" }],
   },
   {
+    slug: "interactive-portfolio",
+    title: "Interactive Portfolio",
+    eyebrow: "Live Demo",
+    subtitle: "An earlier, animated single-page version of this portfolio.",
+    summary:
+      "An earlier interactive, animated single-page version of this portfolio, built as a standalone web app and deployed on Vercel.",
+    flagship: true,
+    categories: ["Web"],
+    roleFit: ["Web", "Frontend"],
+    detail:
+      "An earlier interactive version of this portfolio, built as an animated single-page web app and deployed on Vercel. This static site is the current, primary version.",
+    stack: ["Web", "Single-page app", "Vercel"],
+    impact: [
+      "Animated, single-page interactive portfolio.",
+      "Deployed on Vercel.",
+    ],
+    externalUrl: "https://portfolio-website-lake-zeta-65.vercel.app/",
+  },
+  {
     slug: "emoji-sentiment-stability",
     title: "Stable Contexts, Mixed Feelings",
     eyebrow: "NLP Research",
@@ -509,7 +530,7 @@ export const projects: Project[] = [
     subtitle: "Privacy-first Vedic astrology that computes sidereal charts entirely in the browser.",
     summary:
       "A privacy-first Vedic astrology demo that computes sidereal charts entirely in the browser, including planetary positions, lagna, nakshatras, bhavas, and Vimshottari mahadasha.",
-    categories: ["Web", "Backend"],
+    categories: ["Web"],
     roleFit: ["Software Engineering", "Web"],
     detail:
       "A privacy-first Vedic astrology demo that computes sidereal charts entirely in the browser, including planetary positions, lagna, nakshatras, bhavas, and Vimshottari mahadasha. The calculation engine is separated from the UI, with an optional Python backend for higher-grade ephemeris support.",
@@ -651,7 +672,7 @@ export const archiveFilters = [
   "AI/ML",
   "NLP",
   "Web",
-  "Backend",
+  "Systems",
   "Research",
   "Early Work",
   "Leadership",

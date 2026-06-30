@@ -31,7 +31,7 @@ const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" vi
   <rect x="0" y="0" width="1200" height="6" fill="#2f4a3a"/>
 
   <!-- Left column -->
-  <text x="80" y="126" font-family="${mono}" font-size="21" letter-spacing="3" fill="#8b4c2e">AI / ML ENGINEER  ·  NLP &amp; LLM SYSTEMS</text>
+  <text x="80" y="126" font-family="${mono}" font-size="21" letter-spacing="3" fill="#8b4c2e">SOFTWARE ENGINEER  ·  DATA SCIENTIST</text>
   <text x="76" y="214" font-family="${serif}" font-size="78" font-weight="700" fill="#26352a">Yuuv Jauhari</text>
   <text x="80" y="288" font-family="${serif}" font-size="35" fill="#4a5c45">Research-grade evaluation,</text>
   <text x="80" y="336" font-family="${serif}" font-size="35" fill="#4a5c45">shipped as <tspan font-style="italic" fill="#a8623f">usable</tspan> products.</text>

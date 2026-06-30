@@ -36,10 +36,17 @@ const linkIcon = (kind: string) =>
   </div>
 
   <div class="pcard-links">
-    <a class="case-link" href={projectHref(project.slug)}>
-      Read case study
-      <Icon name="arrow-right" class="arrow" />
-    </a>
+    {project.externalUrl ? (
+      <a class="case-link" href={project.externalUrl} target="_blank" rel="noreferrer">
+        Visit live demo
+        <Icon name="arrow-up-right" class="arrow" />
+      </a>
+    ) : (
+      <a class="case-link" href={projectHref(project.slug)}>
+        Read case study
+        <Icon name="arrow-right" class="arrow" />
+      </a>
+    )}
     {project.links?.map((link) => (
       <a class="ext-link" href={resolveUrl(link.url)} target="_blank" rel="noreferrer">
         <Icon name={linkIcon(link.kind)} />

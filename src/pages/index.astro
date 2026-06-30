@@ -5,12 +5,12 @@ import FlagshipCard from "../components/FlagshipCard.astro";
 import Icon from "../components/Icon.astro";
 import {
   archiveFilters,
-  archiveProjects,
   communityHighlights,
   credibility,
   experience,
   flagshipProjects,
   profile,
+  projects,
   publications,
   skillGroups,
   targetRoles,
@@ -157,14 +157,14 @@ const cv = withBase(profile.cvPath);
       </div>
     </section>
 
-    {/* ---- Archive ------------------------------------------------------ */}
+    {/* ---- All projects ------------------------------------------------- */}
     <section class="section" id="archive" aria-labelledby="archive-title">
       <div class="container">
         <div class="archive-head reveal">
           <div class="section-head" style="margin-bottom:0">
-            <span class="index">05 · More work</span>
-            <h2 class="section-title" id="archive-title">Project archive</h2>
-            <p class="lede">Other projects, experiments, and community work.</p>
+            <span class="index">05 · All work</span>
+            <h2 class="section-title" id="archive-title">All projects</h2>
+            <p class="lede">The complete set, from flagship work to experiments and community projects.</p>
           </div>
           <div class="filters" role="group" aria-label="Filter projects" data-filters>
             {archiveFilters.map((f, i) => (
@@ -176,17 +176,24 @@ const cv = withBase(profile.cvPath);
         </div>
 
         <div class="archive-grid" data-archive>
-          {archiveProjects.map((p) => (
-            <a class="acard reveal" href={projectHref(p.slug)} data-cats={p.categories.join("|")}>
-              <span class="ac-eyebrow">{p.eyebrow}</span>
-              <h3>{p.title}</h3>
-              <p>{p.subtitle ?? p.summary}</p>
-              <span class="ac-foot">
-                <span>{p.categories[0]}</span>
-                <span class="go">Case study →</span>
-              </span>
-            </a>
-          ))}
+          {projects.map((p) => {
+            const external = Boolean(p.externalUrl);
+            const linkAttrs = external
+              ? { href: p.externalUrl, target: "_blank", rel: "noreferrer" }
+              : { href: projectHref(p.slug) };
+            return (
+              <a class="acard reveal" {...linkAttrs} data-cats={p.categories.join("|")}>
+                {p.flagship && <span class="ac-flag">Flagship</span>}
+                <span class="ac-eyebrow">{p.eyebrow}</span>
+                <h3>{p.title}</h3>
+                <p>{p.subtitle ?? p.summary}</p>
+                <span class="ac-foot">
+                  <span>{p.categories[0]}</span>
+                  <span class="go">{external ? "Live demo →" : "Case study →"}</span>
+                </span>
+              </a>
+            );
+          })}
           {communityHighlights.map((c) => (
             <div class="acard acard--static reveal" data-cats={c.categories.join("|")}>
               <span class="ac-eyebrow">{c.eyebrow}</span>

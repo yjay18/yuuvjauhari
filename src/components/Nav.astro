@@ -27,6 +27,7 @@ const links = [
         {links.map((l) => (
           <a href={`${home}#${l.id}`} data-nav-link={l.id}>{l.label}</a>
         ))}
+        <span class="nav-indicator" data-nav-indicator aria-hidden="true"></span>
       </div>
       <a class="btn btn--primary btn--sm nav-cv desktop" href={cv} target="_blank" rel="noreferrer">
         <Icon name="download" />

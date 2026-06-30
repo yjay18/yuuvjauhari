@@ -5,12 +5,14 @@ import { projects, profile } from "../../data/portfolio";
 import { projectHref, resolveUrl, withBase } from "../../lib/links";
 
 export function getStaticPaths() {
-  return projects.map((project, i) => ({
+  // External-only projects (e.g. the live demo) link out and have no case-study page.
+  const pageable = projects.filter((p) => !p.externalUrl);
+  return pageable.map((project, i) => ({
     params: { slug: project.slug },
     props: {
       project,
-      prev: projects[(i - 1 + projects.length) % projects.length],
-      next: projects[(i + 1) % projects.length],
+      prev: pageable[(i - 1 + pageable.length) % pageable.length],
+      next: pageable[(i + 1) % pageable.length],
     },
   }));
 }
