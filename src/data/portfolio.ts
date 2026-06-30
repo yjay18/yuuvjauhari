@@ -12,7 +12,7 @@ export const profile = {
   shortPitch:
     "Software Engineer with experience in Data Science, AI/ML Systems and Integration and Research",
   headline: "I build code that moves from research prototypes to usable products.",
-  degree: "Integrated MSc Computer Science, Trinity College Dublin",
+  degree: "Integrated B.A. (Mod.) & MSc Computer Science, Trinity College Dublin",
   degreeNote: "Overall distinction",
   availability: "Open to new roles",
   cvPath: "Yuuv_Jauhari_Resume.pdf",
@@ -30,7 +30,7 @@ export const targetRoles = [
 
 // Understated credibility row — wordmarks, not a loud logo wall.
 export const credibility: { label: string; note?: string; href?: string }[] = [
-  { label: "Trinity College Dublin", note: "MSc · Distinction" },
+  { label: "Trinity College Dublin", note: "Bachelors + Masters · Distinction" },
   { label: "Quantexa", note: "NLP Data Scientist" },
   { label: "Oracle" },
   { label: "Fathom" },
@@ -219,6 +219,33 @@ export const experience: Experience[] = [
     tag: "Origin",
     summary:
       "Led a school technology club after serving as Robotics Head, building battle robots and line-followers and running the annual tech symposium and online cryptic hunt.",
+  },
+];
+
+export type Education = {
+  period: string;
+  institution: string;
+  location: string;
+  qualification: string;
+  tag?: string;
+  summary: string;
+};
+
+export const education: Education[] = [
+  {
+    period: "5-year integrated programme",
+    institution: "Trinity College Dublin",
+    location: "Dublin, Ireland",
+    qualification: "Integrated B.A. (Mod.) & MSc Computer Science",
+    tag: "Distinction",
+    summary: "A combined undergraduate and master's degree in computer science, completed with overall distinction.",
+  },
+  {
+    period: "Class X & Class XII",
+    institution: "The Mother's International School",
+    location: "Delhi, India",
+    qualification: "Secondary & Senior Secondary Education",
+    summary: "93% in Class X national boards, 95% in Class XII national boards.",
   },
 ];
 
