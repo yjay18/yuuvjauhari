@@ -10,6 +10,7 @@ interface Props {
 const { project, index } = Astro.props;
 
 const proof = (project.evaluation ?? project.build ?? project.impact ?? []).slice(0, 4);
+const metrics = (project.metrics ?? []).slice(0, 3);
 const linkIcon = (kind: string) =>
   kind === "repo" ? "github" : kind === "paper" || kind === "thesis" || kind === "writeup" ? "file" : "arrow-up-right";
 ---
@@ -27,9 +28,37 @@ const linkIcon = (kind: string) =>
   </div>
 
   <div class="pcard-body">
-    <ul class="pcard-proof">
-      {proof.map((p) => <li>{p}</li>)}
-    </ul>
+    <div class="pcard-proof-panel">
+      <span class="pcard-panel-label">Proof</span>
+      <ul class="pcard-proof">
+        {proof.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+    <div class="pcard-signals" aria-label="Project signals">
+      {metrics.length > 0 ? (
+        metrics.map((m) => (
+          <span>
+            <b>{m.value}</b>
+            <small>{m.label}</small>
+          </span>
+        ))
+      ) : (
+        <>
+          <span>
+            <b>{project.stack.length}</b>
+            <small>tools in stack</small>
+          </span>
+          <span>
+            <b>{project.categories[0]}</b>
+            <small>primary area</small>
+          </span>
+          <span>
+            <b>{project.links?.[0]?.kind ?? "case"}</b>
+            <small>available proof</small>
+          </span>
+        </>
+      )}
+    </div>
     <ul class="tags" aria-label="Stack">
       {project.stack.slice(0, 6).map((s) => <li>{s}</li>)}
     </ul>

@@ -101,21 +101,19 @@ const cv = withBase(profile.cvPath);
           <p class="lede">Where the foundation was built.</p>
         </div>
 
-        <div class="xp-list">
+        <div class="edu-grid">
           {education.map((edu) => (
-            <article class="xp reveal">
-              <div class="xp-meta">
-                <p class="yr">{edu.period}</p>
-                <p class="co">{edu.institution}</p>
-                <p class="pl">{edu.location}</p>
+            <article class="edu-card reveal">
+              <div class="edu-topline">
+                <span>{edu.period}</span>
+                <span>{edu.location}</span>
               </div>
-              <div class="xp-body">
-                <div class="role-row">
-                  <span class="role">{edu.qualification}</span>
-                  {edu.tag && <span class="tag">{edu.tag}</span>}
-                </div>
-                <p class="xp-summary">{edu.summary}</p>
+              <div class="edu-main">
+                <h3>{edu.institution}</h3>
+                <p class="edu-degree">{edu.qualification}</p>
+                {edu.tag && <span class="tag">{edu.tag}</span>}
               </div>
+              <p>{edu.summary}</p>
             </article>
           ))}
         </div>

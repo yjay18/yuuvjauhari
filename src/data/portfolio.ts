@@ -425,13 +425,13 @@ export const projects: Project[] = [
     categories: ["AI/ML", "NLP", "Systems"],
     roleFit: ["LLM / Applied AI", "Software Engineering", "AI Systems"],
     metrics: [
-      { value: "8 GB", label: "shared VRAM, LLM + TTS" },
       { value: "3", label: "switchable personas" },
       { value: "10", label: "prompt presets per persona" },
+      { value: "Local", label: "LLM + TTS runtime" },
     ],
     detail: [
       "PersonaForge is a local-first desktop AI chat application for Windows. It runs three switchable personas (Assistant, Tutor, and Thinker) against a locally hosted Ollama model, each driven by a creativity slider that parameterises ten escalating system prompts and a random-refusal probability. The app includes streaming SSE chat, DuckDuckGo-backed web retrieval, on-device voice cloning via Coqui XTTS v2, auto-generated conversation titles, and full per-persona theming.",
-      "The most interesting engineering problem was sharing an 8 GB VRAM budget between Ollama and XTTS v2. I built a thread-locked GPU coordination layer that evicts the active LLM before TTS synthesis and releases the model afterwards so Ollama auto-reloads on the next chat request. Chat and voice run locally with no telemetry; the models need Ollama running, and the optional web search is the only feature that reaches the network.",
+      "The most interesting engineering problem was coordinating local model memory between Ollama and XTTS v2. I built a thread-locked GPU coordination layer that evicts the active LLM before TTS synthesis and releases the model afterwards so Ollama auto-reloads on the next chat request. Chat and voice run locally with no telemetry; the models need Ollama running, and the optional web search is the only feature that reaches the network.",
     ],
     stack: [
       "React",
@@ -449,13 +449,13 @@ export const projects: Project[] = [
     problem:
       "Most capable AI assistants depend on cloud APIs and telemetry. PersonaForge set out to deliver streaming multi-persona chat and natural voice on a single consumer laptop, keeping chat and voice on-device with no telemetry.",
     constraints: [
-      "A single laptop GPU with roughly 8 GB of VRAM, shared between the language model and the voice model.",
+      "A single local machine, with memory pressure varying by the selected language and voice models.",
       "Keep chat and voice on-device, via Ollama and Coqui XTTS v2, with no telemetry.",
       "Must ship as one installable Windows desktop application, not a developer-only stack.",
     ],
     build: [
       "Multi-persona prompt system: three personas, ten parameterised prompt presets each, in-character refusal behaviour, and runtime retheming via CSS custom properties.",
-      "Thread-locked GPU coordination that shares an 8 GB VRAM budget between Ollama chat and Coqui XTTS v2 voice cloning on one laptop GPU.",
+      "Thread-locked GPU coordination between Ollama chat and Coqui XTTS v2 voice cloning on one local machine.",
       "On-device voice cloning with a per-persona reference-WAV system and graceful default-speaker fallback.",
       "Real-time streaming chat over SSE with abort support, background auto-naming, and refusal filtering to prevent context poisoning.",
       "Optional DuckDuckGo retrieval with query rewriting from short follow-ups and in-UI source attribution.",
@@ -469,8 +469,8 @@ export const projects: Project[] = [
     ],
     decisions: [
       {
-        title: "Share one GPU between chat and voice",
-        body: "With only ~8 GB of VRAM, the LLM and XTTS v2 cannot both stay resident. A thread-locked coordinator evicts the model before synthesis and releases it after, trading a brief reload for reliable voice without out-of-memory failures.",
+        title: "Coordinate local chat and voice models",
+        body: "Depending on the selected local model, the LLM and XTTS v2 may not both stay resident. A thread-locked coordinator evicts the model before synthesis and releases it after, trading a brief reload for reliable voice without out-of-memory failures.",
       },
       {
         title: "Filter in-character refusals from context",
@@ -490,7 +490,7 @@ export const projects: Project[] = [
       "Cross-platform packaging for macOS and Linux beyond the current Windows installer.",
       "A model-agnostic backend adapter so engines other than Ollama can be swapped in.",
       "An automated evaluation harness for persona behaviour, refusal rates, and retrieval quality.",
-      "Quantization-aware scheduling to fit larger models within the same VRAM budget.",
+      "Quantization-aware scheduling to fit larger local models within available memory.",
     ],
     links: [{ label: "View on GitHub", url: "https://github.com/yjay18/personaforge", kind: "repo" }],
   },
