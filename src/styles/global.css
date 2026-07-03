@@ -1466,7 +1466,6 @@ a.cred-item:hover b {
 }
 .skill-card .tags li {
   color: var(--body);
-  background: var(--card-2);
   font-size: 0.78rem;
 }
 .applied {
@@ -1593,20 +1592,29 @@ a.pub:hover .pub-go {
   font-size: 0.76rem;
   letter-spacing: 0.02em;
   color: var(--muted);
-  border: 1px solid var(--line);
+  border: 1px solid rgba(255, 255, 255, 0.58);
   border-radius: var(--pill);
-  background: var(--card);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.18)),
+    rgba(47, 93, 92, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.66), 0 8px 22px -20px rgba(38, 53, 42, 0.42);
+  backdrop-filter: saturate(1.6) blur(10px);
+  -webkit-backdrop-filter: saturate(1.6) blur(10px);
   transition: color var(--dur) var(--ease), background var(--dur) var(--ease),
-    border-color var(--dur) var(--ease);
+    border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
 .filter:hover {
   color: var(--ink);
-  border-color: var(--line-strong);
+  border-color: rgba(255, 255, 255, 0.82);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76), 0 10px 24px -20px rgba(38, 53, 42, 0.5);
 }
 .filter[aria-pressed="true"] {
   color: var(--cream);
-  background: var(--green);
-  border-color: var(--green);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent),
+    linear-gradient(180deg, #385740 0%, #2f4a3a 100%);
+  border-color: rgba(255, 255, 255, 0.32);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 14px 28px -22px rgba(47, 74, 58, 0.8);
 }
 
 .archive-grid {
@@ -2087,21 +2095,31 @@ a.acard:hover .ac-foot .go {
 
 /* Hero: quiet interactive-demo link */
 .hero-demo {
-  margin-top: 1.4rem;
+  margin-top: 1.2rem;
 }
 .hero-demo a {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  max-width: 100%;
+  padding: 0.42rem 0.68rem;
   font-size: 0.85rem;
   color: var(--muted);
-  border-bottom: 1px solid transparent;
-  padding-bottom: 1px;
-  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  border-radius: var(--pill);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.18)),
+    rgba(47, 93, 92, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.66), 0 8px 22px -20px rgba(38, 53, 42, 0.42);
+  backdrop-filter: saturate(1.6) blur(10px);
+  -webkit-backdrop-filter: saturate(1.6) blur(10px);
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
 }
 .hero-demo a:hover {
   color: var(--terra-ink);
-  border-color: var(--terra-soft);
+  border-color: rgba(255, 255, 255, 0.82);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76), 0 10px 24px -20px rgba(38, 53, 42, 0.5);
 }
 .hero-demo .icon {
   width: 0.85rem;

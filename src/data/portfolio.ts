@@ -427,7 +427,7 @@ export const projects: Project[] = [
     metrics: [
       { value: "3", label: "switchable personas" },
       { value: "10", label: "prompt presets per persona" },
-      { value: "Local", label: "LLM + TTS runtime" },
+      { value: "On-device", label: "LLM + TTS runtime" },
     ],
     detail: [
       "PersonaForge is a local-first desktop AI chat application for Windows. It runs three switchable personas (Assistant, Tutor, and Thinker) against a locally hosted Ollama model, each driven by a creativity slider that parameterises ten escalating system prompts and a random-refusal probability. The app includes streaming SSE chat, DuckDuckGo-backed web retrieval, on-device voice cloning via Coqui XTTS v2, auto-generated conversation titles, and full per-persona theming.",
