@@ -56,8 +56,9 @@ function initActiveNav(): void {
     .filter((el): el is HTMLElement => Boolean(el));
 
   let activeId: string | null = null;
-  let clickedTargetId: string | null = null;
+  let navClickLocked = false;
   let clickUnlockTimer = 0;
+  let transitionRestoreFrame = 0;
 
   const moveIndicator = (link: HTMLElement | null, instant = false) => {
     if (!indicator) return;
@@ -65,13 +66,19 @@ function initActiveNav(): void {
       indicator.classList.remove("is-active");
       return;
     }
-    if (instant) indicator.style.transition = "none";
+    if (instant) {
+      window.cancelAnimationFrame(transitionRestoreFrame);
+      indicator.style.transition = "none";
+    }
     indicator.style.transform = `translateX(${link.offsetLeft}px)`;
     indicator.style.width = `${link.offsetWidth}px`;
     indicator.classList.add("is-active");
     if (instant) {
-      void indicator.offsetWidth; // reflow before restoring the animated state
-      indicator.style.transition = "";
+      transitionRestoreFrame = window.requestAnimationFrame(() => {
+        transitionRestoreFrame = window.requestAnimationFrame(() => {
+          indicator.style.transition = "";
+        });
+      });
     }
   };
 
@@ -81,12 +88,28 @@ function initActiveNav(): void {
     moveIndicator(links.find((l) => l.dataset.navLink === id) ?? null, instant);
   };
 
+  const viewedSectionId = (): string | null => {
+    const probeY = window.innerHeight * 0.42;
+    const containing = sections.find((section) => {
+      const rect = section.getBoundingClientRect();
+      return rect.top <= probeY && rect.bottom >= probeY;
+    });
+    if (containing) return containing.id;
+
+    const nearest = sections
+      .map((section) => {
+        const rect = section.getBoundingClientRect();
+        return { id: section.id, distance: Math.abs(rect.top - probeY) };
+      })
+      .sort((a, b) => a.distance - b.distance)[0];
+    return nearest?.id ?? activeId;
+  };
+
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        if (clickedTargetId && entry.target.id !== clickedTargetId) return;
-        if (clickedTargetId === entry.target.id) clickedTargetId = null;
+        if (navClickLocked) return;
         setActive(entry.target.id);
       });
     },
@@ -94,18 +117,42 @@ function initActiveNav(): void {
   );
   sections.forEach((s) => io.observe(s));
 
+  const unlockNavClick = () => {
+    navClickLocked = false;
+  };
+
   links.forEach((link) => {
     link.addEventListener("click", () => {
       const id = link.dataset.navLink ?? null;
       if (!id) return;
-      clickedTargetId = id;
-      setActive(id, true);
+      navClickLocked = true;
+
+      const fromId = viewedSectionId();
+      if (fromId && fromId !== id) {
+        setActive(fromId, true);
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() => setActive(id));
+          });
+        });
+      } else {
+        setActive(id);
+      }
+
       window.clearTimeout(clickUnlockTimer);
-      clickUnlockTimer = window.setTimeout(() => {
-        clickedTargetId = null;
-      }, 1400);
+      clickUnlockTimer = window.setTimeout(unlockNavClick, 3000);
     });
   });
+
+  window.addEventListener(
+    "scrollend",
+    () => {
+      if (!navClickLocked) return;
+      window.clearTimeout(clickUnlockTimer);
+      window.setTimeout(unlockNavClick, 80);
+    },
+    { passive: true }
+  );
 
   window.addEventListener(
     "resize",
