@@ -56,33 +56,56 @@ function initActiveNav(): void {
     .filter((el): el is HTMLElement => Boolean(el));
 
   let activeId: string | null = null;
+  let clickedTargetId: string | null = null;
+  let clickUnlockTimer = 0;
 
-  const moveIndicator = (link: HTMLElement | null) => {
+  const moveIndicator = (link: HTMLElement | null, instant = false) => {
     if (!indicator) return;
     if (!link) {
       indicator.classList.remove("is-active");
       return;
     }
+    if (instant) indicator.style.transition = "none";
     indicator.style.transform = `translateX(${link.offsetLeft}px)`;
     indicator.style.width = `${link.offsetWidth}px`;
     indicator.classList.add("is-active");
+    if (instant) {
+      void indicator.offsetWidth; // reflow before restoring the animated state
+      indicator.style.transition = "";
+    }
   };
 
-  const setActive = (id: string | null) => {
+  const setActive = (id: string | null, instant = false) => {
     activeId = id;
     links.forEach((l) => l.setAttribute("aria-current", l.dataset.navLink === id ? "true" : "false"));
-    moveIndicator(links.find((l) => l.dataset.navLink === id) ?? null);
+    moveIndicator(links.find((l) => l.dataset.navLink === id) ?? null, instant);
   };
 
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) setActive(entry.target.id);
+        if (!entry.isIntersecting) return;
+        if (clickedTargetId && entry.target.id !== clickedTargetId) return;
+        if (clickedTargetId === entry.target.id) clickedTargetId = null;
+        setActive(entry.target.id);
       });
     },
     { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
   );
   sections.forEach((s) => io.observe(s));
+
+  links.forEach((link) => {
+    link.addEventListener("click", () => {
+      const id = link.dataset.navLink ?? null;
+      if (!id) return;
+      clickedTargetId = id;
+      setActive(id, true);
+      window.clearTimeout(clickUnlockTimer);
+      clickUnlockTimer = window.setTimeout(() => {
+        clickedTargetId = null;
+      }, 1400);
+    });
+  });
 
   window.addEventListener(
     "resize",
