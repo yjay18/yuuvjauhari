@@ -57,8 +57,8 @@ function initActiveNav(): void {
 
   let activeId: string | null = null;
   let navClickLocked = false;
+  let clickTargetId: string | null = null;
   let clickUnlockTimer = 0;
-  let transitionRestoreFrame = 0;
 
   const moveIndicator = (link: HTMLElement | null, instant = false) => {
     if (!indicator) return;
@@ -66,20 +66,10 @@ function initActiveNav(): void {
       indicator.classList.remove("is-active");
       return;
     }
-    if (instant) {
-      window.cancelAnimationFrame(transitionRestoreFrame);
-      indicator.style.transition = "none";
-    }
+    indicator.style.transition = instant ? "none" : "";
     indicator.style.transform = `translateX(${link.offsetLeft}px)`;
     indicator.style.width = `${link.offsetWidth}px`;
     indicator.classList.add("is-active");
-    if (instant) {
-      transitionRestoreFrame = window.requestAnimationFrame(() => {
-        transitionRestoreFrame = window.requestAnimationFrame(() => {
-          indicator.style.transition = "";
-        });
-      });
-    }
   };
 
   const setActive = (id: string | null, instant = false) => {
@@ -107,37 +97,51 @@ function initActiveNav(): void {
 
   const io = new IntersectionObserver(
     (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        if (navClickLocked) return;
-        setActive(entry.target.id);
-      });
+      if (navClickLocked || !entries.some((entry) => entry.isIntersecting)) return;
+      setActive(viewedSectionId());
     },
     { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
   );
   sections.forEach((s) => io.observe(s));
 
   const unlockNavClick = () => {
+    if (clickTargetId) {
+      setActive(clickTargetId, true);
+      if (indicator) {
+        void indicator.offsetWidth;
+        indicator.style.transition = "";
+      }
+    }
     navClickLocked = false;
+    clickTargetId = null;
   };
 
   links.forEach((link) => {
-    link.addEventListener("click", () => {
+    link.addEventListener("click", (event) => {
       const id = link.dataset.navLink ?? null;
       if (!id) return;
+      const target = document.getElementById(id);
+      if (!target) return;
+
+      event.preventDefault();
       navClickLocked = true;
+      clickTargetId = id;
 
       const fromId = viewedSectionId();
       if (fromId && fromId !== id) {
         setActive(fromId, true);
+        if (indicator) void indicator.offsetWidth; // commit the current-section position
         window.requestAnimationFrame(() => {
-          window.requestAnimationFrame(() => {
-            window.requestAnimationFrame(() => setActive(id));
-          });
+          if (indicator) indicator.style.transition = "";
+          setActive(id);
         });
       } else {
+        if (indicator) indicator.style.transition = "";
         setActive(id);
       }
+
+      target.scrollIntoView({ block: "start", behavior: reducedMotion ? "auto" : "smooth" });
+      window.history.pushState(null, "", link.href);
 
       window.clearTimeout(clickUnlockTimer);
       clickUnlockTimer = window.setTimeout(unlockNavClick, 3000);
