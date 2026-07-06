@@ -2499,7 +2499,7 @@ a.acard {
     transition-duration: 360ms;
   }
   .js .reveal {
-    opacity: 0.22;
+    opacity: 1;
     transform: translateY(8px);
   }
   .js .hero-copy > .reveal,
