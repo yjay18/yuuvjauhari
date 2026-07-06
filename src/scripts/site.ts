@@ -10,6 +10,7 @@ function initReveals(): void {
     items.forEach((el) => el.classList.add("is-visible"));
     return;
   }
+  const mobileReveal = window.matchMedia("(max-width: 760px)").matches;
   const io = new IntersectionObserver(
     (entries, observer) => {
       entries.forEach((entry) => {
@@ -19,7 +20,9 @@ function initReveals(): void {
         }
       });
     },
-    { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+    mobileReveal
+      ? { rootMargin: "0px 0px 18% 0px", threshold: 0.01 }
+      : { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
   );
   items.forEach((el) => io.observe(el));
 }

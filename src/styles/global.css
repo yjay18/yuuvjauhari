@@ -2495,6 +2495,19 @@ a.acard {
   .nav-cv.desktop {
     display: none;
   }
+  .reveal {
+    transition-duration: 360ms;
+  }
+  .js .reveal {
+    opacity: 0.22;
+    transform: translateY(8px);
+  }
+  .js .hero-copy > .reveal,
+  .js .artifact.reveal,
+  .js .hero-title.reveal {
+    opacity: 1;
+    transform: none;
+  }
   .nav-toggle {
     display: inline-flex;
   }
