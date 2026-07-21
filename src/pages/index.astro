@@ -16,7 +16,7 @@ import {
   skillGroups,
   targetRoles,
 } from "../data/portfolio";
-import { projectHref, resolveUrl, withBase } from "../lib/links";
+import { resolveUrl, withBase } from "../lib/links";
 
 const cv = withBase(profile.cvPath);
 ---
@@ -58,6 +58,11 @@ const cv = withBase(profile.cvPath);
 
         <div class="work-grid">
           {flagshipProjects.map((project, i) => <FlagshipCard project={project} index={i} />)}
+        </div>
+        <div class="work-more reveal">
+          <a class="btn btn--secondary" href={withBase("#archive")}>
+            See all projects <Icon name="arrow-down" />
+          </a>
         </div>
       </div>
     </section>
@@ -120,43 +125,11 @@ const cv = withBase(profile.cvPath);
       </div>
     </section>
 
-    {/* ---- Skills ------------------------------------------------------- */}
-    <section class="section" id="skills" aria-labelledby="skills-title">
-      <div class="container">
-        <div class="section-head reveal">
-          <span class="index">04 · Capabilities</span>
-          <h2 class="section-title" id="skills-title">Skills</h2>
-          <p class="lede">Grouped by area, with the projects where each was applied.</p>
-        </div>
-
-        <div class="skills-grid">
-          {skillGroups.map((group) => (
-            <article class="skill-card reveal">
-              <h3>{group.title}</h3>
-              <p class="caption">{group.caption}</p>
-              <ul class="tags">
-                {group.skills.map((s) => <li>{s}</li>)}
-              </ul>
-              <div class="applied">
-                <span class="lbl">Applied in</span>
-                {group.appliedIn.map((p) => (
-                  <a href={projectHref(p.slug)}>
-                    {p.label}
-                    <Icon name="arrow-right" class="arrow" />
-                  </a>
-                ))}
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
     {/* ---- Publications ------------------------------------------------- */}
     <section class="section" id="research" aria-labelledby="research-title">
       <div class="container">
         <div class="section-head reveal">
-          <span class="index">05 · Research</span>
+          <span class="index">04 · Research</span>
           <h2 class="section-title" id="research-title">Publications</h2>
           <p class="lede">Peer-reviewed, thesis, and preprint work.</p>
         </div>
@@ -191,7 +164,7 @@ const cv = withBase(profile.cvPath);
       <div class="container">
         <div class="archive-head reveal">
           <div class="section-head" style="margin-bottom:0">
-            <span class="index">06 · All work</span>
+            <span class="index">05 · All work</span>
             <h2 class="section-title" id="archive-title">All projects</h2>
             <p class="lede">The complete set, from flagship work to experiments and community projects.</p>
           </div>
@@ -206,21 +179,24 @@ const cv = withBase(profile.cvPath);
 
         <div class="archive-grid" data-archive>
           {projects.map((p) => {
-            const external = Boolean(p.externalUrl);
-            const linkAttrs = external
-              ? { href: p.externalUrl, target: "_blank", rel: "noreferrer" }
-              : { href: projectHref(p.slug) };
+            const repo = p.links?.find((link) => link.kind === "repo");
+            const destination = repo?.url ?? p.externalUrl;
+            const actionLabel = repo ? "GitHub →" : p.externalUrl ? "Open project →" : null;
+            const Tag = destination ? "a" : "article";
+            const linkAttrs = destination
+              ? { href: resolveUrl(destination), target: "_blank", rel: "noreferrer" }
+              : {};
             return (
-              <a class="acard reveal" {...linkAttrs} data-cats={p.categories.join("|")}>
+              <Tag class="acard reveal" {...linkAttrs} data-cats={p.categories.join("|")}>
                 {p.flagship && <span class="ac-flag">Flagship</span>}
                 <span class="ac-eyebrow">{p.eyebrow}</span>
                 <h3>{p.title}</h3>
                 <p>{p.subtitle ?? p.summary}</p>
                 <span class="ac-foot">
                   <span>{p.categories[0]}</span>
-                  <span class="go">{external ? "Live demo →" : "Case study →"}</span>
+                  {actionLabel && <span class="go">{actionLabel}</span>}
                 </span>
-              </a>
+              </Tag>
             );
           })}
           {communityHighlights.map((c) => (
@@ -235,6 +211,38 @@ const cv = withBase(profile.cvPath);
             </div>
           ))}
           <p class="archive-empty" data-archive-empty hidden>No projects in this category.</p>
+        </div>
+      </div>
+    </section>
+
+    {/* ---- Skills ------------------------------------------------------- */}
+    <section class="section" id="skills" aria-labelledby="skills-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="index">06 · Capabilities</span>
+          <h2 class="section-title" id="skills-title">Skills</h2>
+          <p class="lede">Grouped by area, with the projects where each was applied.</p>
+        </div>
+
+        <div class="skills-grid">
+          {skillGroups.map((group) => (
+            <article class="skill-card reveal">
+              <h3>{group.title}</h3>
+              <p class="caption">{group.caption}</p>
+              <ul class="tags">
+                {group.skills.map((s) => <li>{s}</li>)}
+              </ul>
+              <div class="applied">
+                <span class="lbl">Applied in</span>
+                {group.appliedIn.map((p) => (
+                  <a href={resolveUrl(p.url)} target="_blank" rel="noreferrer">
+                    {p.label}
+                    <Icon name="arrow-up-right" class="arrow" />
+                  </a>
+                ))}
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>

@@ -42,7 +42,7 @@ export type SkillGroup = {
   title: string;
   caption: string;
   skills: string[];
-  appliedIn: { slug: string; label: string }[];
+  appliedIn: { url: string; label: string }[];
 };
 
 export const skillGroups: SkillGroup[] = [
@@ -60,8 +60,8 @@ export const skillGroups: SkillGroup[] = [
       "Sparse models",
     ],
     appliedIn: [
-      { slug: "icu-hypotension-warning", label: "ICU Hypotension" },
-      { slug: "legal-bill-predictor", label: "Legal Bill Predictor" },
+      { url: "https://github.com/yjay18/ClassifyingUSLegislation", label: "Legal Bill Predictor" },
+      { url: "https://github.com/yjay18/LoraResearch", label: "LoRA Interpretability" },
     ],
   },
   {
@@ -78,8 +78,8 @@ export const skillGroups: SkillGroup[] = [
       "Ollama",
     ],
     appliedIn: [
-      { slug: "personaforge", label: "PersonaForge" },
-      { slug: "negotiation-gym", label: "NegotiationGym" },
+      { url: "https://github.com/yjay18/Linkflix", label: "Linkflix" },
+      { url: "https://github.com/chrishokamp/multi-agent-social-simulation", label: "NegotiationGym" },
     ],
   },
   {
@@ -97,8 +97,8 @@ export const skillGroups: SkillGroup[] = [
       "Electron",
     ],
     appliedIn: [
-      { slug: "personaforge", label: "PersonaForge" },
-      { slug: "cloud-builder", label: "Cloud Builder" },
+      { url: "https://github.com/yjay18/Linkflix", label: "Linkflix" },
+      { url: "https://github.com/yjay18/Cloud-Builder", label: "Cloud Builder" },
     ],
   },
   {
@@ -113,8 +113,8 @@ export const skillGroups: SkillGroup[] = [
       "Ablation thinking",
     ],
     appliedIn: [
-      { slug: "negotiation-gym", label: "NegotiationGym" },
-      { slug: "lora-interpretability", label: "LoRA Interpretability" },
+      { url: "https://github.com/chrishokamp/multi-agent-social-simulation", label: "NegotiationGym" },
+      { url: "https://github.com/yjay18/LoraResearch", label: "LoRA Interpretability" },
     ],
   },
 ];
@@ -336,7 +336,10 @@ export const projects: Project[] = [
       "Richer temporal feature windows and calibrated uncertainty estimates.",
       "Per-unit threshold adaptation to local alarm tolerances.",
     ],
-    links: [{ label: "Read the thesis", url: "MCS_Hypotension_Thesis.pdf", kind: "thesis" }],
+    links: [
+      { label: "View on GitHub", url: "https://github.com/jauhariy/Thesis", kind: "repo" },
+      { label: "Read the thesis", url: "MCS_Hypotension_Thesis.pdf", kind: "thesis" },
+    ],
   },
   {
     slug: "negotiation-gym",
@@ -414,14 +417,40 @@ export const projects: Project[] = [
     links: [{ label: "View on GitHub", url: "https://github.com/yjay18/ClassifyingUSLegislation", kind: "repo" }],
   },
   {
+    slug: "linkflix",
+    title: "Linkflix",
+    eyebrow: "Local-First Media App",
+    subtitle:
+      "A native macOS media organizer and player with local network streaming, offline semantic search, and optional on-device AI.",
+    summary:
+      "A personal macOS media library built with Electron that keeps playback, search, subtitles, and local network sharing under the user's control.",
+    flagship: true,
+    categories: ["Systems", "AI/ML"],
+    roleFit: ["Software Engineering", "Desktop / Systems", "Applied AI"],
+    metrics: [
+      { value: "100%", label: "local on macOS" },
+      { value: "22 MB", label: "offline search model" },
+      { value: "HLS", label: "local network streaming" },
+    ],
+    detail:
+      "A native macOS media organizer and player built with Electron, Node.js, and vanilla JavaScript. Linkflix scans local media folders, plays files through native or HLS-backed web players, and adds optional offline semantic search, local subtitle generation, and Ollama-powered library assistance.",
+    stack: ["Electron", "Node.js", "JavaScript", "FFmpeg", "Whisper", "Transformers.js", "Ollama", "HLS"],
+    impact: [
+      "Streams a local media library to devices on the same network through on-the-fly HLS transcodes.",
+      "Searches library content offline with a pre-bundled MiniLM embedding model and local IndexedDB cache.",
+      "Generates subtitle sidecar files locally with Whisper, keeping audio and transcripts on-device.",
+      "Scans media folders, enriches titles from public metadata, and filters common library noise automatically.",
+    ],
+    links: [{ label: "View on GitHub", url: "https://github.com/yjay18/Linkflix", kind: "repo" }],
+  },
+  {
     slug: "personaforge",
     title: "PersonaForge",
     eyebrow: "Local-First AI Desktop App",
     subtitle:
-      "Local-first desktop AI app: multi-persona chat, on-device voice cloning, web retrieval, and GPU coordination.",
+      "Local-first desktop AI app with multi-persona chat, on-device voice cloning, web retrieval, and GPU coordination.",
     summary:
-      "A local-first desktop AI chat app with three switchable personas, on-device voice cloning, and DuckDuckGo web search. Built with React, FastAPI, Ollama, Electron, and Coqui XTTS v2.",
-    flagship: true,
+      "A local-first desktop AI chat app with three switchable personas, on-device voice cloning, and DuckDuckGo web search, built with React, FastAPI, Ollama, Electron, and Coqui XTTS v2.",
     categories: ["AI/ML", "NLP", "Systems"],
     roleFit: ["LLM / Applied AI", "Software Engineering", "AI Systems"],
     metrics: [
@@ -429,68 +458,13 @@ export const projects: Project[] = [
       { value: "10", label: "prompt presets per persona" },
       { value: "On-device", label: "LLM + TTS runtime" },
     ],
-    detail: [
-      "PersonaForge is a local-first desktop AI chat application for Windows. It runs three switchable personas (Assistant, Tutor, and Thinker) against a locally hosted Ollama model, each driven by a creativity slider that parameterises ten escalating system prompts and a random-refusal probability. The app includes streaming SSE chat, DuckDuckGo-backed web retrieval, on-device voice cloning via Coqui XTTS v2, auto-generated conversation titles, and full per-persona theming.",
-      "The most interesting engineering problem was coordinating local model memory between Ollama and XTTS v2. I built a thread-locked GPU coordination layer that evicts the active LLM before TTS synthesis and releases the model afterwards so Ollama auto-reloads on the next chat request. Chat and voice run locally with no telemetry; the models need Ollama running, and the optional web search is the only feature that reaches the network.",
-    ],
-    stack: [
-      "React",
-      "TypeScript",
-      "FastAPI",
-      "Python",
-      "SQLModel",
-      "Ollama",
-      "Coqui XTTS v2",
-      "Electron",
-      "PyInstaller",
-      "Vite",
-      "Local-first",
-    ],
-    problem:
-      "Most capable AI assistants depend on cloud APIs and telemetry. PersonaForge set out to deliver streaming multi-persona chat and natural voice on a single consumer laptop, keeping chat and voice on-device with no telemetry.",
-    constraints: [
-      "A single local machine, with memory pressure varying by the selected language and voice models.",
-      "Keep chat and voice on-device, via Ollama and Coqui XTTS v2, with no telemetry.",
-      "Must ship as one installable Windows desktop application, not a developer-only stack.",
-    ],
-    build: [
-      "Multi-persona prompt system: three personas, ten parameterised prompt presets each, in-character refusal behaviour, and runtime retheming via CSS custom properties.",
-      "Thread-locked GPU coordination between Ollama chat and Coqui XTTS v2 voice cloning on one local machine.",
-      "On-device voice cloning with a per-persona reference-WAV system and graceful default-speaker fallback.",
-      "Real-time streaming chat over SSE with abort support, background auto-naming, and refusal filtering to prevent context poisoning.",
-      "Optional DuckDuckGo retrieval with query rewriting from short follow-ups and in-UI source attribution.",
-    ],
-    architecture: [
-      "React + TypeScript frontend (Vite) running inside an Electron desktop shell.",
-      "FastAPI + Python backend with SQLModel persistence for conversations and settings.",
-      "Ollama serves the local LLM; Coqui XTTS v2 handles on-device voice cloning.",
-      "A thread-locked GPU coordinator evicts the active LLM before TTS synthesis and releases it afterward, so Ollama auto-reloads on the next message.",
-      "Packaged with PyInstaller (backend) plus a Vite build (frontend) inside Electron, shipped as a single NSIS installer.",
-    ],
-    decisions: [
-      {
-        title: "Coordinate local chat and voice models",
-        body: "Depending on the selected local model, the LLM and XTTS v2 may not both stay resident. A thread-locked coordinator evicts the model before synthesis and releases it after, trading a brief reload for reliable voice without out-of-memory failures.",
-      },
-      {
-        title: "Filter in-character refusals from context",
-        body: "Personas can refuse in character via a random-refusal probability. Those refusal turns are filtered out of model context so they do not poison later responses.",
-      },
-      {
-        title: "Local-first by design",
-        body: "Chat runs on a local Ollama model and voice is synthesised on-device with Coqui XTTS v2, with no telemetry. Web search is optional and is the only part that uses the network.",
-      },
-    ],
-    evaluation: [
+    detail:
+      "A Windows desktop AI chat app that runs local Ollama models and on-device Coqui XTTS v2 voice cloning, with streaming chat, optional DuckDuckGo retrieval, per-persona theming, and a GPU coordination layer for managing local model memory.",
+    stack: ["React", "TypeScript", "FastAPI", "Python", "Ollama", "Coqui XTTS v2", "Electron"],
+    impact: [
       "Delivers streaming multi-persona chat, web retrieval, and voice cloning on a single laptop GPU.",
       "Runs chat and voice locally with no telemetry; web search is optional.",
       "Ships as a one-click Windows installer with a bundled backend and frontend.",
-    ],
-    improvements: [
-      "Cross-platform packaging for macOS and Linux beyond the current Windows installer.",
-      "A model-agnostic backend adapter so engines other than Ollama can be swapped in.",
-      "An automated evaluation harness for persona behaviour, refusal rates, and retrieval quality.",
-      "Quantization-aware scheduling to fit larger local models within available memory.",
     ],
     links: [{ label: "View on GitHub", url: "https://github.com/yjay18/personaforge", kind: "repo" }],
   },
@@ -513,6 +487,25 @@ export const projects: Project[] = [
       "Deployed on Vercel.",
     ],
     externalUrl: "https://portfolio-website-lake-zeta-65.vercel.app/",
+  },
+  {
+    slug: "jemdash",
+    title: "Jemdash",
+    eyebrow: "Agentic Development Environment",
+    subtitle: "A personal fork of Emdash for coordinating multiple coding agents through isolated Git worktrees.",
+    summary:
+      "A TypeScript desktop development environment forked from Emdash, built around parallel coding-agent workflows, Git worktrees, diff review, and local or SSH-based projects.",
+    categories: ["Systems", "AI/ML"],
+    roleFit: ["Software Engineering", "Developer Tools", "AI Systems"],
+    detail:
+      "A personal fork of Emdash, the open-source desktop environment for running coding agents in parallel. It keeps agent work isolated in Git worktrees, with tools for reviewing diffs, tracking checks, and coordinating local or remote projects.",
+    stack: ["TypeScript", "Desktop app", "Git worktrees", "Agent orchestration", "SSH"],
+    impact: [
+      "Coordinates multiple coding agents through isolated Git worktrees and branches.",
+      "Supports reviewing diffs, creating pull requests, and inspecting CI checks from one workspace.",
+      "Works with local projects as well as remote machines over SSH/SFTP.",
+    ],
+    links: [{ label: "View on GitHub", url: "https://github.com/yjay18/Jemdash", kind: "repo" }],
   },
   {
     slug: "emoji-sentiment-stability",

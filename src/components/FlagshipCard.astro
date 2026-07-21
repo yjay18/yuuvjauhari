@@ -1,6 +1,6 @@
 ---
 import type { Project } from "../data/portfolio";
-import { projectHref, resolveUrl } from "../lib/links";
+import { resolveUrl } from "../lib/links";
 import Icon from "./Icon.astro";
 
 interface Props {
@@ -11,6 +11,8 @@ const { project, index } = Astro.props;
 
 const proof = (project.evaluation ?? project.build ?? project.impact ?? []).slice(0, 4);
 const metrics = (project.metrics ?? []).slice(0, 3);
+const repoLink = project.links?.find((link) => link.kind === "repo");
+const supportingLinks = project.links?.filter((link) => link !== repoLink);
 const linkIcon = (kind: string) =>
   kind === "repo" ? "github" : kind === "paper" || kind === "thesis" || kind === "writeup" ? "file" : "arrow-up-right";
 ---
@@ -65,18 +67,17 @@ const linkIcon = (kind: string) =>
   </div>
 
   <div class="pcard-links">
-    {project.externalUrl ? (
-      <a class="case-link" href={project.externalUrl} target="_blank" rel="noreferrer">
-        Visit live demo
-        <Icon name="arrow-up-right" class="arrow" />
+    {repoLink ? (
+      <a class="case-link" href={resolveUrl(repoLink.url)} target="_blank" rel="noreferrer">
+        <Icon name="github" /> View on GitHub
       </a>
-    ) : (
-      <a class="case-link" href={projectHref(project.slug)}>
-        Read case study
-        <Icon name="arrow-right" class="arrow" />
+    ) : null}
+    {!repoLink && project.externalUrl && (
+      <a class="case-link" href={project.externalUrl} target="_blank" rel="noreferrer">
+        <Icon name="arrow-up-right" /> Visit project
       </a>
     )}
-    {project.links?.map((link) => (
+    {supportingLinks?.map((link) => (
       <a class="ext-link" href={resolveUrl(link.url)} target="_blank" rel="noreferrer">
         <Icon name={linkIcon(link.kind)} />
         {link.label}

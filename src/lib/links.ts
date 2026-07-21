@@ -14,5 +14,3 @@ export const withBase = (path: string): string => {
 
 /** Resolve a link that may be external (http…) or an internal asset path. */
 export const resolveUrl = (url: string): string => (isExternal(url) ? url : withBase(url));
-
-export const projectHref = (slug: string): string => withBase(`projects/${slug}/`);
