@@ -2401,7 +2401,7 @@ body::before {
 .edu-card,
 .recruiter,
 .pub,
-a.acard,
+.acard,
 .case-aside {
   background-color: rgba(255, 255, 255, 0.42);
   backdrop-filter: saturate(2.5) blur(28px);
@@ -2449,7 +2449,7 @@ a.acard,
 .pcard,
 .xp,
 .edu-card,
-a.acard {
+.acard {
   background-image: radial-gradient(
     260px circle at var(--mx, -100%) var(--my, -100%),
     rgba(255, 255, 255, 0.6),
