@@ -216,7 +216,7 @@ function initDrawer(): void {
     }
   });
 
-  window.matchMedia("(min-width: 761px)").addEventListener("change", (e) => {
+  window.matchMedia("(min-width: 1041px)").addEventListener("change", (e) => {
     if (e.matches) setOpen(false);
   });
 }

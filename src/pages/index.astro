@@ -17,8 +17,27 @@ import {
   targetRoles,
 } from "../data/portfolio";
 import { resolveUrl, withBase } from "../lib/links";
+import { Image } from "astro:assets";
+import kinoirLogo from "../../products/kinoir/logo copy.png";
+import pitCrewLogo from "../../products/pitcrew/pit-crew-logo copy.png";
 
 const cv = withBase(profile.cvPath);
+const offerings = [
+  {
+    name: "Kinoir",
+    logo: kinoirLogo,
+    url: "https://yjay18.github.io/Kinoir/",
+    description:
+      "Kinoir turns a folder of local movies and shows into a polished, private streaming library. It cleans messy filenames, finds metadata, and creates hover previews on-device. Grounded Ollama discovery and Kinoir Air keep exploration and home-network streaming local—open source, native to macOS, and account-free.",
+  },
+  {
+    name: "Pit Crew",
+    logo: pitCrewLogo,
+    url: "https://yjay18.github.io/ballxpit-run-tracker/",
+    description:
+      "Pit Crew is a live BALL x PIT companion for faster decisions during a run. Track characters, balls, passives, levels, and available evolutions, then compare the upgrades the game offers against your current build. It builds on the original tracker by u/Cryphixi / Allena Oglivie, with credit preserved throughout.",
+  },
+];
 ---
 
 <BaseLayout>
@@ -47,11 +66,91 @@ const cv = withBase(profile.cvPath);
       </div>
     </section>
 
+    {/* ---- Solutions ---------------------------------------------------- */}
+    <section class="section product-section" id="solutions" aria-labelledby="solutions-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="index">01 · Client software</span>
+          <h2 class="section-title" id="solutions-title">Solutions</h2>
+          <p class="lede">Custom built affordable Software offerings for growing and mid sized companies</p>
+        </div>
+
+        <article class="solution-card reveal">
+          <div class="solution-identity" aria-label="LeadFinder">
+            <div class="leadfinder-mark" aria-hidden="true">
+              <span>LF</span>
+              <i></i>
+            </div>
+            <div>
+              <span class="product-label">Privacy-first B2B discovery</span>
+              <h3>LeadFinder</h3>
+            </div>
+          </div>
+          <div class="solution-copy">
+            <p>
+              A local-first workspace that finds public buying and expansion signals, verifies each
+              company, locates a real contact route, and scores the opportunity with AI. It can draft
+              a first-contact message and assist with the company&rsquo;s own form, but it never sends or
+              submits anything for you.
+            </p>
+            <div class="solution-actions">
+              <a class="btn btn--primary" href={withBase("#contact")}>
+                <Icon name="mail" /> Contact me for pricing
+              </a>
+              <a class="btn btn--secondary" href={withBase("leadfinder-demo/")}>
+                Try the interactive demo <Icon name="arrow-up-right" />
+              </a>
+              <span class="demo-note">Built-in mock data · no backend</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    {/* ---- Open-source offerings --------------------------------------- */}
+    <section class="section product-section" id="offerings" aria-labelledby="offerings-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="index">02 · Community products</span>
+          <h2 class="section-title" id="offerings-title">Offerings</h2>
+          <p class="lede">Open Source Free Product Offerings to give back to the community &lt;3</p>
+        </div>
+
+        <div class="offerings-grid">
+          {offerings.map((product) => (
+            <article class="offering-card reveal" tabindex="0">
+              <div class="offering-logo-stage">
+                <Image
+                  src={product.logo}
+                  alt={`${product.name} logo`}
+                  width={410}
+                  height={410}
+                  format="webp"
+                  loading="lazy"
+                />
+              </div>
+              <div class="offering-reveal">
+                <div class="offering-copy">
+                  <span class="product-label">Free · Open source</span>
+                  <h3>{product.name}</h3>
+                  <p>{product.description}</p>
+                  <a class="case-link" href={product.url} target="_blank" rel="noreferrer">
+                    Visit {product.name} <Icon name="arrow-up-right" />
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+        <p class="offering-hint reveal">Hover a logo to learn more.</p>
+      </div>
+    </section>
+
     {/* ---- Flagship work ------------------------------------------------ */}
     <section class="section" id="work" aria-labelledby="work-title">
       <div class="container">
         <div class="section-head reveal">
-          <span class="index">01 · Selected work</span>
+          <span class="index">03 · Selected work</span>
           <h2 class="section-title" id="work-title">Flagship projects</h2>
           <p class="lede">Selected work across research, ML systems, and applied engineering.</p>
         </div>
@@ -71,7 +170,7 @@ const cv = withBase(profile.cvPath);
     <section class="section" id="experience" aria-labelledby="xp-title">
       <div class="container">
         <div class="section-head reveal">
-          <span class="index">02 · Track record</span>
+          <span class="index">04 · Track record</span>
           <h2 class="section-title" id="xp-title">Experience</h2>
           <p class="lede">Across industry and research.</p>
         </div>
@@ -101,7 +200,7 @@ const cv = withBase(profile.cvPath);
     <section class="section" id="education" aria-labelledby="edu-title">
       <div class="container">
         <div class="section-head reveal">
-          <span class="index">03 · Education</span>
+          <span class="index">05 · Education</span>
           <h2 class="section-title" id="edu-title">Education</h2>
           <p class="lede">Where the foundation was built.</p>
         </div>
@@ -129,7 +228,7 @@ const cv = withBase(profile.cvPath);
     <section class="section" id="research" aria-labelledby="research-title">
       <div class="container">
         <div class="section-head reveal">
-          <span class="index">04 · Research</span>
+          <span class="index">06 · Research</span>
           <h2 class="section-title" id="research-title">Publications</h2>
           <p class="lede">Peer-reviewed, thesis, and preprint work.</p>
         </div>
@@ -164,7 +263,7 @@ const cv = withBase(profile.cvPath);
       <div class="container">
         <div class="archive-head reveal">
           <div class="section-head" style="margin-bottom:0">
-            <span class="index">05 · All work</span>
+            <span class="index">07 · All work</span>
             <h2 class="section-title" id="archive-title">All projects</h2>
             <p class="lede">The complete set, from flagship work to experiments and community projects.</p>
           </div>
@@ -219,7 +318,7 @@ const cv = withBase(profile.cvPath);
     <section class="section" id="skills" aria-labelledby="skills-title">
       <div class="container">
         <div class="section-head reveal">
-          <span class="index">06 · Capabilities</span>
+          <span class="index">08 · Capabilities</span>
           <h2 class="section-title" id="skills-title">Skills</h2>
           <p class="lede">Grouped by area, with the projects where each was applied.</p>
         </div>
@@ -251,7 +350,7 @@ const cv = withBase(profile.cvPath);
     <section class="section" id="contact" aria-labelledby="contact-title">
       <div class="container contact-grid">
         <div class="contact-lead reveal">
-          <span class="eyebrow">07 · Contact</span>
+          <span class="eyebrow">09 · Contact</span>
           <h2 id="contact-title" style="margin-top:0.9rem">
             Interested in systems that are both <span class="accent-word">researched</span> and built?
           </h2>

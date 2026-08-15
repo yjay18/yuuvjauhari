@@ -7,6 +7,8 @@ const home = withBase("");
 const cv = withBase(profile.cvPath);
 
 const links = [
+  { label: "Solutions", id: "solutions" },
+  { label: "Offerings", id: "offerings" },
   { label: "Work", id: "work" },
   { label: "Experience", id: "experience" },
   { label: "Education", id: "education" },
@@ -20,8 +22,8 @@ const links = [
 <header class="topbar" id="topbar" data-topbar>
   <div class="container">
     <a class="brand" href={home} aria-label={`${profile.name}, home`}>
-      <span class="brand-mark" aria-hidden="true">Y</span>
-      <span class="brand-name">{profile.name}</span>
+      <img class="brand-mark" src={withBase("favicon.svg")} alt="" width="30" height="30" />
+      <span class="brand-name">uuv Jauhari</span>
     </a>
 
     <nav class="nav" aria-label="Primary">

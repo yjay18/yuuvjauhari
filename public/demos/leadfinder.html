@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LeadFinder — private, local B2B lead discovery</title>
+<style>
+  :root{
+    --ink:#26352a; --graphite:#4a5c45; --mist:#6b7a64; --faint:#879180;
+    --line:rgba(38,53,42,.14); --line2:rgba(38,53,42,.24); --paper:#eef0e6; --card:#fbfcf7; --wash:#f3f5ed;
+    --accent:#8b4c2e; --moss:#2f5d5c; --moss-soft:#e5eee8; --indigo:#3d5f72; --gold:#8a6d1f;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);background:radial-gradient(80% 48% at 12% 0%,rgba(255,255,255,.82),transparent 72%),var(--paper);font-size:14px;line-height:1.5}
+  .serif{font-family:"Iowan Old Style",Palatino,Georgia,"Times New Roman",serif}
+  button{font:inherit;cursor:pointer}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+  /* header */
+  header{position:sticky;top:0;z-index:40;background:rgba(238,240,230,.78);border-bottom:1px solid var(--line2);backdrop-filter:saturate(1.8) blur(24px);-webkit-backdrop-filter:saturate(1.8) blur(24px)}
+  .bar{display:flex;align-items:center;gap:18px;height:60px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:"Iowan Old Style",Palatino,Georgia,serif;font-size:18px;font-weight:600}
+  .logo .mark{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:linear-gradient(145deg,#3d6049,#203529);color:#fff;font-size:13px;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 10px 22px -14px rgba(38,53,42,.7)}
+  nav.tabs{display:flex;gap:2px;margin-left:auto}
+  .tabs button{border:0;background:none;color:var(--graphite);padding:7px 12px;border-radius:5px;font-size:13px}
+  .tabs button:hover{background:var(--wash);color:var(--ink)}
+  .tabs button.active{background:linear-gradient(180deg,#385740,#2f4a3a);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 20px -14px rgba(38,53,42,.8)}
+  .rightset{display:flex;gap:8px;align-items:center;margin-left:auto}
+  .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:5px 11px;font-size:12px;color:var(--mist);background:var(--wash)}
+  .chip .dot{width:6px;height:6px;border-radius:50%;background:var(--moss)}
+  .ghost{border:1px solid var(--line2);background:none;border-radius:5px;padding:6px 11px;font-size:12.5px;color:var(--graphite)}
+  .ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+  main{padding:26px 0 80px}
+  h1.page{font-family:"Iowan Old Style",Palatino,Georgia,serif;font-size:26px;margin:0 0 4px}
+  .sub{color:var(--mist);margin:0 0 20px}
+
+  /* metrics */
+  .metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .metric{background:var(--card);padding:16px 16px 18px}
+  .metric .k{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mist)}
+  .metric .v{font-size:30px;font-weight:600;margin:6px 0 2px}
+  .metric .s{font-size:11.5px;color:var(--faint)}
+  @media(max-width:900px){.metrics{grid-template-columns:repeat(2,1fr)}}
+
+  .grid2{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:22px}
+  @media(max-width:900px){.grid2{grid-template-columns:1fr}}
+  .panel{background:rgba(255,255,255,.58);border:1px solid rgba(255,255,255,.9);border-radius:var(--radius);padding:18px 18px 20px;box-shadow:0 18px 42px -34px rgba(38,53,42,.48),inset 0 1px 0 #fff;backdrop-filter:saturate(1.8) blur(20px);-webkit-backdrop-filter:saturate(1.8) blur(20px)}
+  .panel h2{font-family:"Iowan Old Style",Palatino,Georgia,serif;font-size:17px;margin:0 0 3px}
+  .panel .sub{margin:0 0 14px;font-size:12px}
+  .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:10px 0}
+  label.fld{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mist);margin-bottom:5px}
+  select,input{width:100%;border:1px solid var(--line2);background:var(--paper);border-radius:5px;padding:8px 10px;font:inherit;font-size:13px}
+  .btn{background:linear-gradient(180deg,#385740,#2f4a3a);color:#fff;border:0;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:500;box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 10px 22px -16px rgba(38,53,42,.8)}
+  .btn:hover{background:linear-gradient(180deg,#446a4f,#385740)}
+  .btn.sm{padding:6px 11px;font-size:12px}
+  .progress{height:6px;border-radius:999px;background:var(--wash);overflow:hidden;margin:14px 0 6px}
+  .progress>i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .muted{color:var(--mist)}
+
+  .activity li{list-style:none;padding:9px 0;border-top:1px solid var(--line);font-size:12.5px}
+  .activity li:first-child{border-top:0}
+  .activity .t{font-weight:600}
+  .activity .d{color:var(--mist)}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  thead th{text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mist);padding:12px 14px;border-bottom:2px solid var(--ink)}
+  tbody td{padding:13px 14px;border-top:1px solid var(--line);font-size:13px;vertical-align:top}
+  tbody tr{cursor:pointer}
+  tbody tr:hover{background:var(--wash)}
+  .cname{font-weight:600}
+  .csub{color:var(--faint);font-size:11.5px;margin-top:2px}
+  .tag{display:inline-block;border:1px solid var(--line2);border-radius:4px;padding:1px 7px;font-size:11px;background:var(--wash);color:var(--graphite)}
+  .route{font-size:12.5px}
+  .route.ok{color:var(--moss)} .route.form{color:var(--indigo)} .route.none{color:var(--accent)}
+  .score{font-weight:700;font-family:ui-monospace,Menlo,monospace}
+  .pill{border-radius:999px;padding:2px 9px;font-size:11px;font-weight:600}
+  .pill.high{background:var(--moss-soft);color:var(--moss)} .pill.med{background:#f5efe0;color:var(--gold)}
+
+  .empty{background:var(--card);border:1px dashed var(--line2);border-radius:var(--radius);padding:56px 20px;text-align:center;color:var(--mist)}
+  .empty .em-k{font-size:26px;color:var(--faint)}
+  .hide{display:none}
+
+  /* slide-over detail */
+  .overlay{position:fixed;inset:0;background:rgba(26,26,26,.28);z-index:45}
+  aside.detail{position:fixed;top:0;right:0;height:100%;width:min(460px,94vw);background:var(--card);border-left:1px solid var(--line);z-index:46;
+    box-shadow:-8px 0 30px rgba(40,36,24,.12);display:flex;flex-direction:column;animation:slide .18s ease}
+  @keyframes slide{from{transform:translateX(24px);opacity:.4}to{transform:none;opacity:1}}
+  .detail .hd{padding:18px 20px;border-bottom:1px solid var(--line)}
+  .detail .bd{flex:1;overflow:auto}
+  .sect{padding:16px 20px;border-bottom:1px solid var(--line)}
+  .sect h4{margin:0 0 8px;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mist)}
+  .kv{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;font-size:12.5px}
+  .kv .lbl{color:var(--mist)}
+  .quote{border-left:2px solid var(--line2);padding-left:10px;color:var(--graphite);font-size:12.5px;margin:6px 0}
+  .detail .ft{padding:12px 20px;border-top:1px solid var(--line);display:flex;gap:8px}
+  .x{border:1px solid var(--line);background:none;border-radius:5px;padding:4px 9px;color:var(--mist)}
+
+  footer{border-top:1px solid var(--line);background:var(--wash);color:var(--mist);font-size:11.5px}
+  footer .wrap{display:flex;justify-content:space-between;gap:12px;padding:18px 20px}
+
+  /* modal (welcome) */
+  .mask{position:fixed;inset:0;background:rgba(26,26,26,.4);z-index:60;display:grid;place-items:center}
+  .modal{width:min(460px,92vw);background:var(--card);border:1px solid var(--line2);border-radius:var(--radius);box-shadow:0 24px 70px rgba(40,36,24,.32);overflow:hidden}
+  .modal .mh{border-bottom:2px solid var(--ink);padding:18px 22px}
+  .modal .mb{padding:20px 22px}
+  .modal h3{margin:0 0 8px;font-family:"Iowan Old Style",Palatino,Georgia,serif;font-size:22px}
+  .modal .mf{display:flex;justify-content:space-between;padding:14px 22px;border-top:1px solid var(--line);background:var(--wash)}
+  .promise{background:var(--wash);border:1px solid var(--line);border-radius:5px;padding:12px 14px;margin-top:12px;font-size:12.5px}
+  .promise b{color:var(--ink)}
+
+  /* guided tour */
+  #tour{position:fixed;inset:0;z-index:70;display:none}
+  #tourCatch{position:absolute;inset:0}
+  #spot{position:absolute;border-radius:8px;box-shadow:0 0 0 9999px rgba(26,26,26,.55);outline:2px solid var(--accent);transition:all .2s;pointer-events:none}
+  #tip{position:absolute;width:330px;max-width:92vw;background:var(--card);border:1px solid var(--line2);border-radius:var(--radius);
+    box-shadow:0 18px 50px rgba(40,36,24,.35);padding:16px}
+  #tip .ey{display:flex;justify-content:space-between;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  #tip .ey span{color:var(--mist);letter-spacing:0;text-transform:none}
+  #tip h3{margin:6px 0 6px;font-family:"Iowan Old Style",Palatino,Georgia,serif;font-size:17px}
+  #tip p{margin:0;font-size:12.5px;color:var(--graphite)}
+  #tip .tf{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+  #arrow{position:absolute;width:11px;height:11px;background:var(--card);border:1px solid var(--line2);transform:rotate(45deg)}
+
+  /* The demo responds to its frame width automatically; no view switch is required. */
+  #disc,#comp{overflow-x:auto;border-radius:var(--radius);-webkit-overflow-scrolling:touch}
+  @media(max-width:760px){
+    .wrap{padding-inline:14px}
+    .bar{height:auto;min-height:62px;flex-wrap:wrap;gap:8px 12px;padding-block:9px}
+    .logo{flex:1;min-width:150px}
+    .rightset{margin-left:auto}
+    nav.tabs{order:3;width:100%;margin-left:0;overflow-x:auto;overscroll-behavior-inline:contain;padding:2px 0 4px;-webkit-overflow-scrolling:touch}
+    .tabs button{flex:0 0 auto;white-space:nowrap;min-height:38px}
+    main{padding:18px 0 56px}
+    .row3{grid-template-columns:1fr}
+    .panel{padding:15px}
+    table{min-width:700px}
+    tbody td,thead th{padding-inline:11px}
+    .modal{max-height:calc(100dvh - 24px);overflow:auto}
+    #tip{width:min(330px,calc(100vw - 24px))}
+    footer .wrap{flex-direction:column;padding-inline:14px}
+    button,.btn,.ghost{min-height:40px}
+  }
+  @media(max-width:480px){
+    .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .metric{padding:13px 12px 15px}
+    .metric .v{font-size:26px}
+    .chip{display:none}
+    .rightset{gap:5px}
+    .ghost{padding-inline:9px}
+    .detail .ft{flex-wrap:wrap}
+    .detail .ft button{flex:1 1 auto}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="logo"><span class="mark">LF</span> LeadFinder</div>
+    <nav class="tabs" data-tour="nav" id="tabs">
+      <button data-page="overview" class="active">Overview</button>
+      <button data-page="discovery">Discovery</button>
+      <button data-page="companies">Companies</button>
+      <button data-page="saved">Saved</button>
+      <button data-page="outreach">Outreach</button>
+    </nav>
+    <div class="rightset">
+      <span class="chip" data-tour="ai"><span class="dot"></span> AI ready</span>
+      <button class="ghost" onclick="startTour()">Take the tour</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- OVERVIEW -->
+  <section id="p-overview">
+    <div class="metrics" data-tour="metrics">
+      <div class="metric"><div class="k">Companies found</div><div class="v" id="m-count">0</div><div class="s">In your workspace</div></div>
+      <div class="metric"><div class="k">Ways to contact</div><div class="v" id="m-routes">0</div><div class="s">Email, form, or phone</div></div>
+      <div class="metric"><div class="k">Best-fit leads</div><div class="v" id="m-fit">0</div><div class="s">Score 80 and up</div></div>
+      <div class="metric"><div class="k">Contact forms</div><div class="v" id="m-forms">0</div><div class="s">Ready to fill in</div></div>
+      <div class="metric"><div class="k">Emails found</div><div class="v" id="m-emails">0</div><div class="s">Published addresses</div></div>
+      <div class="metric"><div class="k">Fresh signals</div><div class="v" id="m-fresh">0</div><div class="s">Last 90 days</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel" data-tour="scan">
+        <h2>Discovery scan</h2>
+        <p class="sub muted">Public buying/expansion signals → the company's official site → a way to get in touch.</p>
+        <div class="row3">
+          <div><label class="fld">Data source</label>
+            <select><option>Expansion &amp; hiring signals</option><option>Funding announcements</option><option>Job-board activity</option><option>Directory import</option></select></div>
+          <div><label class="fld">Industry</label>
+            <select><option>All industries</option><option>Manufacturing</option><option>SaaS</option><option>Logistics</option><option>Healthcare</option></select></div>
+          <div><label class="fld">Max leads</label><select><option>10</option><option>25</option><option>50</option></select></div>
+        </div>
+        <div class="progress"><i id="bar"></i></div>
+        <div class="muted mono" id="scanmsg" style="font-size:12px">Ready. Reads current public signals, then checks official sites.</div>
+        <div style="margin-top:14px;display:flex;gap:8px">
+          <button class="btn" onclick="runScan()" id="scanbtn">Find leads</button>
+          <button class="ghost" onclick="go('discovery')">View results</button>
+        </div>
+      </div>
+      <div class="panel activity" data-tour="activity">
+        <h2>Activity</h2>
+        <p class="sub muted">Everything the app does, newest first.</p>
+        <ul id="activity"><li class="muted">Run a scan to see activity.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISCOVERY -->
+  <section id="p-discovery" class="hide">
+    <h1 class="page">Discovery</h1>
+    <p class="sub">New finds to work through. Click any company to open its full profile.</p>
+    <div data-tour="table" id="disc"></div>
+  </section>
+
+  <!-- COMPANIES -->
+  <section id="p-companies" class="hide">
+    <h1 class="page">Companies</h1>
+    <p class="sub">Your confirmed directory — every company you can act on, with the sources behind it.</p>
+    <div id="comp"></div>
+  </section>
+
+  <!-- SAVED -->
+  <section id="p-saved" class="hide">
+    <h1 class="page">Saved</h1>
+    <p class="sub">The shortlist you set aside, and the ones you've already contacted.</p>
+    <div class="empty"><div class="em-k">☆</div><p>Open a company and choose <b>Save</b> to build your shortlist.</p></div>
+  </section>
+
+  <!-- OUTREACH -->
+  <section id="p-outreach" class="hide" data-tour="outreach">
+    <h1 class="page">Outreach</h1>
+    <p class="sub">Draft a first message, then let the assistant fill the company's own contact form. Nothing is ever sent automatically.</p>
+    <div class="grid2">
+      <div class="panel">
+        <h2>Composer</h2><p class="sub muted">Pick a company, language and tone — then draft.</p>
+        <div class="row3"><div><label class="fld">Company</label><select id="oc"></select></div>
+          <div><label class="fld">Tone</label><select><option>Formal</option><option>Warm</option><option>Direct</option></select></div>
+          <div><label class="fld">Language</label><select><option>English</option><option>Local</option><option>Bilingual</option></select></div></div>
+        <button class="btn" style="margin-top:6px" onclick="draft()">Write draft with AI</button>
+        <textarea id="draftbox" rows="7" style="width:100%;margin-top:12px;border:1px solid var(--line2);border-radius:5px;padding:10px;font:inherit;font-size:13px" placeholder="Your draft appears here — edit freely. Nothing is sent until you send it."></textarea>
+      </div>
+      <div class="panel">
+        <h2>Contact-form assistant</h2><p class="sub muted">Fills the company's own web form for you. You review and press send.</p>
+        <ol style="padding-left:18px;font-size:12.5px;color:var(--graphite);line-height:1.9">
+          <li>Open the company's form</li><li>Read its fields</li><li>Match your details with AI</li>
+          <li>Fill it in (outlined for review)</li><li><b>You</b> check and press the site's send button</li>
+        </ol>
+        <div class="promise"><b>Never auto-submits.</b> The assistant never presses submit, ticks a consent box, or solves a CAPTCHA.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>Runs privately on your machine. Contact details are only shown when found on a real page.</span><span class="serif">Trusted research. Human judgment.</span></div></footer>
+
+<!-- welcome -->
+<div class="mask" id="welcome">
+  <div class="modal">
+    <div class="mh"><div style="font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)">Welcome</div>
+      <h3 style="margin-top:6px">Meet LeadFinder</h3></div>
+    <div class="mb">
+      <p>LeadFinder finds companies showing buying or expansion intent, confirms who they are, reads their sites for a way to get in touch, and drafts your first message — privately, on your own machine.</p>
+      <div class="promise">
+        <div><b>Nothing is invented.</b> Emails and phones are only shown when found on a real page, with a link.</div>
+        <div style="margin-top:6px"><b>You always press send.</b> The app drafts and fills forms — it never sends for you.</div>
+      </div>
+    </div>
+    <div class="mf"><button class="ghost" onclick="closeWelcome()">Skip</button>
+      <button class="btn" onclick="closeWelcome();startTour()">Take the 60-second tour</button></div>
+  </div>
+</div>
+
+<!-- guided tour -->
+<div id="tour">
+  <div id="tourCatch"></div>
+  <div id="spot"></div>
+  <div id="tip">
+    <div class="ey">Guided tour <span id="tstep"></span></div>
+    <h3 id="ttitle"></h3><p id="tbody"></p>
+    <div class="tf"><button class="x" style="border:0;background:none;color:var(--mist)" onclick="endTour()" id="tskip">Skip tour</button>
+      <div style="display:flex;gap:8px"><button class="ghost" onclick="tourGo(-1)" id="tback">Back</button>
+      <button class="btn sm" onclick="tourGo(1)" id="tnext">Next</button></div></div>
+    <div id="arrow" class="hide"></div>
+  </div>
+</div>
+
+<script>
+/* ---------- demo data (generic) ---------- */
+const DATA = [
+  {n:"Northwind Robotics", d:"northwind-robotics.com", ind:"Manufacturing", loc:"Austin, TX", route:"Email + form", rk:"ok", email:"sales@northwind-robotics.com", form:"/contact", score:92, fit:"High",
+    why:"Announced a new 40,000 sq ft plant and 120 new roles.", sum:"Builds warehouse automation arms; opening a second facility and hiring across engineering — strong expansion intent."},
+  {n:"Marlow Foods Group", d:"marlowfoods.co", ind:"Food & Bev", loc:"Leeds, UK", route:"Contact form", rk:"form", form:"/enquiry", score:74, fit:"Medium",
+    why:"Press release on entering two new export markets.", sum:"Mid-market food producer expanding exports; a contact form is the only public route."},
+  {n:"Aster Health Systems", d:"asterhealth.io", ind:"Healthcare", loc:"Pune, IN", route:"Email found", rk:"ok", email:"partnerships@asterhealth.io", score:88, fit:"High",
+    why:"Series B funding, hiring a country manager.", sum:"Digital-health platform, freshly funded and staffing up for a new region."},
+  {n:"Copperline Logistics", d:"copperline.com", ind:"Logistics", loc:"Rotterdam, NL", route:"Phone only", rk:"none", phone:"+31 10 555 0148", score:61, fit:"Medium",
+    why:"New distribution hub announced.", sum:"Freight operator adding a hub; only a phone number is published."},
+  {n:"Bluepeak SaaS", d:"bluepeak.app", ind:"SaaS", loc:"Toronto, CA", route:"Email + form", rk:"ok", email:"hello@bluepeak.app", form:"/demo", score:83, fit:"High",
+    why:"Job posts for enterprise sales in 3 regions.", sum:"B2B analytics SaaS scaling its sales org internationally."},
+  {n:"Sierra Materials", d:"sierra-materials.com", ind:"Manufacturing", loc:"Bilbao, ES", route:"Contact form", rk:"form", form:"/contacto", score:69, fit:"Medium",
+    why:"Named in a supplier tender for a new line.", sum:"Industrial materials supplier tendering for expansion work."},
+];
+let scanned = 0, opened = new Set();
+
+/* ---------- navigation ---------- */
+function go(page){
+  document.querySelectorAll('main > section').forEach(s=>s.classList.add('hide'));
+  document.getElementById('p-'+page).classList.remove('hide');
+  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('active', b.dataset.page===page));
+  window.scrollTo({top:0});
+}
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>go(b.dataset.page));
+
+/* ---------- scan (mock) ---------- */
+function runScan(){
+  const bar=document.getElementById('bar'), btn=document.getElementById('scanbtn'), msg=document.getElementById('scanmsg');
+  btn.disabled=true; let p=0; msg.textContent="Reading signals and checking official sites…";
+  const t=setInterval(()=>{ p+=12; bar.style.width=Math.min(p,100)+'%';
+    if(p>=100){ clearInterval(t); scanned=DATA.length; render(); btn.disabled=false;
+      msg.textContent="Scan complete — "+DATA.length+" companies, "+DATA.filter(c=>c.rk!=='none').length+" contactable.";
+      go('discovery'); } },140);
+  const acts=["Signal matched — Northwind Robotics","Official site resolved — bluepeak.app","Contact form found — marlowfoods.co","Email extracted — asterhealth.io","Identity verified — 6 companies"];
+  document.getElementById('activity').innerHTML = acts.map((a,i)=>`<li><span class="t">${a.split(' — ')[0]}</span> <span class="d">— ${a.split(' — ')[1]||''}</span></li>`).join('');
+}
+
+/* ---------- tables ---------- */
+function rowsHtml(list){
+  if(!list.length) return `<div class="empty"><div class="em-k">∅</div><p>No companies yet. Run a scan on the Overview page.</p></div>`;
+  return `<table><thead><tr><th>Company</th><th>Industry</th><th>Location</th><th>Contact route</th><th>Score</th><th>Fit</th></tr></thead><tbody>${
+    list.map((c,i)=>`<tr onclick="openDetail(${DATA.indexOf(c)})">
+      <td><div class="cname">${c.n}</div><div class="csub mono">${c.d}</div></td>
+      <td><span class="tag">${c.ind}</span></td><td>${c.loc}</td>
+      <td class="route ${c.rk}">${c.route}</td><td class="score">${c.score}</td>
+      <td><span class="pill ${c.fit==='High'?'high':'med'}">${c.fit}</span></td></tr>`).join('')}</tbody></table>`;
+}
+function render(){
+  const list = scanned?DATA:[];
+  document.getElementById('disc').innerHTML = rowsHtml(list);
+  document.getElementById('comp').innerHTML = list.length? rowsHtml(list)
+    : `<div class="empty"><div class="em-k">▤</div><p>Confirmed companies appear here after a scan.</p></div>`;
+  document.getElementById('m-count').textContent=list.length;
+  document.getElementById('m-routes').textContent=list.filter(c=>c.rk!=='none').length;
+  document.getElementById('m-fit').textContent=list.filter(c=>c.fit==='High').length;
+  document.getElementById('m-forms').textContent=list.filter(c=>c.form).length;
+  document.getElementById('m-emails').textContent=list.filter(c=>c.email).length;
+  document.getElementById('m-fresh').textContent=list.length;
+  document.getElementById('oc').innerHTML = (list.length?list:DATA).map(c=>`<option>${c.n}</option>`).join('');
+}
+
+/* ---------- detail slide-over ---------- */
+function openDetail(i){
+  const c=DATA[i];
+  const ov=document.createElement('div'); ov.className='overlay'; ov.onclick=closeDetail; ov.id='ov';
+  const el=document.createElement('aside'); el.className='detail'; el.id='det';
+  el.innerHTML=`
+    <div class="hd"><div style="display:flex;justify-content:space-between;gap:10px">
+      <div><div class="serif" style="font-size:20px">${c.n}</div><div class="mono muted" style="font-size:12px">${c.d}</div></div>
+      <button class="x" onclick="closeDetail()">✕</button></div>
+      <div style="margin-top:10px"><span class="tag">${c.ind}</span> <span class="pill ${c.fit==='High'?'high':'med'}" style="margin-left:6px">${c.fit} fit · ${c.score}/100</span></div></div>
+    <div class="bd">
+      <div class="sect"><h4>AI relevance read</h4>
+        <p style="margin:0 0 6px">${c.sum}</p>
+        <div class="quote">${c.why}</div>
+        <div class="muted" style="font-size:11px" class="mono">Local model · scored on verified facts</div></div>
+      <div class="sect"><h4>Contact routes</h4><div class="kv">
+        <div class="lbl">Email</div><div class="mono">${c.email||'<span class="muted">—</span>'}</div>
+        <div class="lbl">Contact form</div><div>${c.form?('<span class="mono">'+c.d+c.form+'</span>'):'<span class="muted">—</span>'}</div>
+        <div class="lbl">Phone</div><div class="mono">${c.phone||'<span class="muted">—</span>'}</div></div></div>
+      <div class="sect"><h4>Why this company surfaced</h4><div class="quote">${c.why}</div>
+        <div class="muted" style="font-size:11.5px">Source: public announcement · linked in the app</div></div>
+    </div>
+    <div class="ft"><button class="btn" onclick="go('outreach');closeDetail()">Draft outreach</button>
+      <button class="ghost" onclick="closeDetail()">Save lead</button></div>`;
+  document.body.append(ov,el);
+}
+function closeDetail(){ document.getElementById('ov')?.remove(); document.getElementById('det')?.remove(); }
+
+function draft(){
+  const box=document.getElementById('draftbox'), name=document.getElementById('oc').value;
+  box.value=`Subject: Supporting ${name}'s next step\n\nHi there,\n\nI came across ${name}'s recent announcement and thought our work might be a good fit as you expand. We help teams like yours move quickly on hiring and market entry.\n\nWould you be open to a short introductory call next week?\n\nBest regards,\n[Your name]`;
+}
+
+/* ---------- welcome ---------- */
+function closeWelcome(){ document.getElementById('welcome').remove(); }
+
+/* ---------- guided tour (spotlight coach-marks) ---------- */
+const STEPS=[
+  {page:'overview',title:'Welcome',body:'This quick tour opens each part of the app and shows what it does. Next to move on, or Skip anytime.'},
+  {page:'overview',target:'nav',title:'The tabs',body:'Everything lives behind these tabs, left to right as a company goes from a fresh lead to someone you\'ve contacted.'},
+  {page:'overview',target:'metrics',title:'Your numbers',body:'Live counts of what you\'ve found. A dashboard you can act on at a glance.',place:'bottom'},
+  {page:'overview',target:'scan',title:'Find leads',body:'Pick a source and press Find. The app reads public buying/expansion signals, resolves each company\'s site, and looks for a way to contact them.',place:'top'},
+  {page:'discovery',target:'table',title:'Discovery',body:'New finds land here with a fit score and a contact route. Click any company to open its full profile.',place:'top'},
+  {page:'companies',title:'Companies',body:'Confirmed companies collect in your directory, each with the real sources behind it kept underneath.'},
+  {page:'outreach',target:'outreach',title:'Outreach',body:'Draft a first message, then let the assistant fill the company\'s own form. It never sends or submits on its own — you always press send.',place:'top'},
+  {page:'overview',target:'ai',title:'Private & local',body:'The AI runs on your own machine. Nothing you scan or write is uploaded, and facts are found — never invented.',place:'bottom'},
+  {page:'overview',title:'You\'re ready',body:'That\'s the tour. Press "Find leads" on the Overview to see it in action with sample data.'},
+];
+let ti=0;
+function startTour(){ ti=0; document.getElementById('tour').style.display='block'; showStep(); }
+function endTour(){ document.getElementById('tour').style.display='none'; }
+function tourGo(d){ ti+=d; if(ti>=STEPS.length){endTour();return;} if(ti<0)ti=0; showStep(); }
+function showStep(){
+  const s=STEPS[ti]; if(s.page) go(s.page);
+  document.getElementById('tstep').textContent=(ti+1)+' of '+STEPS.length;
+  document.getElementById('ttitle').textContent=s.title;
+  document.getElementById('tbody').textContent=s.body;
+  document.getElementById('tback').style.display= ti>0?'':'none';
+  document.getElementById('tnext').textContent= ti===STEPS.length-1?'Finish':'Next';
+  document.getElementById('tskip').textContent= ti===STEPS.length-1?'Close':'Skip tour';
+  setTimeout(()=>place(s),60);
+}
+function place(s){
+  const spot=document.getElementById('spot'), tip=document.getElementById('tip'), arrow=document.getElementById('arrow');
+  const el = s.target? document.querySelector('[data-tour="'+s.target+'"]') : null;
+  const vw=innerWidth, vh=innerHeight, GAP=14, PAD=12;
+  if(!el){ spot.style.display='none'; arrow.classList.add('hide');
+    tip.style.top=(vh/2-tip.offsetHeight/2)+'px'; tip.style.left=(vw/2-tip.offsetWidth/2)+'px'; return; }
+  el.scrollIntoView({block:'nearest'});
+  const r=el.getBoundingClientRect();
+  spot.style.display='block';
+  spot.style.top=(r.top-6)+'px'; spot.style.left=(r.left-6)+'px'; spot.style.width=(r.width+12)+'px'; spot.style.height=(r.height+12)+'px';
+  const tw=tip.offsetWidth, th=tip.offsetHeight, cx=r.left+r.width/2, cy=r.top+r.height/2;
+  let place=s.place||'bottom';
+  if(place==='bottom'&&r.bottom+GAP+th>vh-PAD)place='top';
+  if(place==='top'&&r.top-GAP-th<PAD)place='bottom';
+  let top,left;
+  if(place==='bottom'){top=r.bottom+GAP;left=cx-tw/2;}
+  else if(place==='top'){top=r.top-GAP-th;left=cx-tw/2;}
+  else if(place==='right'){left=r.right+GAP;top=cy-th/2;}
+  else {left=r.left-GAP-tw;top=cy-th/2;}
+  left=Math.max(PAD,Math.min(left,vw-tw-PAD)); top=Math.max(PAD,Math.min(top,vh-th-PAD));
+  tip.style.top=top+'px'; tip.style.left=left+'px';
+  arrow.classList.remove('hide');
+  if(place==='bottom'||place==='top'){ const ax=Math.max(16,Math.min(cx-left,tw-16));
+    arrow.style.left=(ax-5)+'px'; arrow.style.right=''; arrow.style.top=place==='bottom'?'-6px':''; arrow.style.bottom=place==='top'?'-6px':''; }
+  else { const ay=Math.max(16,Math.min(cy-top,th-16)); arrow.style.top=(ay-5)+'px';
+    arrow.style.left=place==='right'?'-6px':''; arrow.style.right=place==='left'?'-6px':''; arrow.style.bottom=''; }
+}
+addEventListener('keydown',e=>{ if(document.getElementById('tour').style.display!=='block')return;
+  if(e.key==='Escape')endTour(); else if(e.key==='ArrowRight'||e.key==='Enter')tourGo(1); else if(e.key==='ArrowLeft')tourGo(-1); });
+addEventListener('resize',()=>{ if(document.getElementById('tour').style.display==='block')place(STEPS[ti]); });
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Pit Crew logo</title>
+  <desc id="desc">A lime green square with a pixel-inspired P times symbol.</desc>
+  <rect width="512" height="512" rx="72" fill="#10140f"/>
+  <rect x="112" y="112" width="312" height="312" rx="12" fill="#435119"/>
+  <rect x="72" y="72" width="312" height="312" rx="12" fill="#d9ff52" stroke="#efffb7" stroke-width="16"/>
+  <path fill="#10120d" d="M120 148h28v168h-28zm28 0h70v28h-70zm0 70h70v28h-70zm70-42h28v42h-28z"/>
+  <path fill="#10120d" d="M270 178h26v26h-26zm52 0h26v26h-26zm-26 26h26v26h-26zm-26 26h26v26h-26zm52 0h26v26h-26zm-52 26h26v26h-26zm52 0h26v26h-26z"/>
+</svg>
