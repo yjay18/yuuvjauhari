@@ -10,12 +10,11 @@ export const profile = {
   githubHandle: "yjay18",
   shortPitch:
     "Software Engineer with experience in Data Science, AI/ML Systems and Integration and Research",
-  headline: "I build code that moves from research prototypes to usable products.",
+  headline: "I build quality code for communities and businesses.",
   degree: "Integrated B.A. (Mod.) & MSc Computer Science, Trinity College Dublin",
   degreeNote: "Overall distinction",
-  availability: "Open to new roles",
   cvPath: "Yuuv_Jauhari_Resume.pdf",
-  lastUpdated: "June 2026",
+  lastUpdated: "August 2026",
 };
 
 export const targetRoles = [
@@ -25,16 +24,6 @@ export const targetRoles = [
   "NLP Data Scientist",
   "Software Engineer",
   "Research-to-production AI",
-];
-
-// Understated credibility row — wordmarks, not a loud logo wall.
-export const credibility: { label: string; note?: string; href?: string }[] = [
-  { label: "Trinity College Dublin", note: "Bachelors + Masters · Distinction" },
-  { label: "Quantexa", note: "NLP Data Scientist" },
-  { label: "Oracle" },
-  { label: "Fathom" },
-  { label: "COLM 2025", note: "Accepted paper", href: "https://arxiv.org/abs/2510.04368" },
-  { label: "GitHub", note: "@yjay18", href: "https://github.com/yjay18" },
 ];
 
 export type SkillGroup = {
@@ -77,7 +66,7 @@ export const skillGroups: SkillGroup[] = [
       "Ollama",
     ],
     appliedIn: [
-      { url: "https://github.com/yjay18/Linkflix", label: "Linkflix" },
+      { url: "https://yjay18.github.io/Kinoir/", label: "Kinoir" },
       { url: "https://github.com/chrishokamp/multi-agent-social-simulation", label: "NegotiationGym" },
     ],
   },
@@ -96,7 +85,7 @@ export const skillGroups: SkillGroup[] = [
       "Electron",
     ],
     appliedIn: [
-      { url: "https://github.com/yjay18/Linkflix", label: "Linkflix" },
+      { url: "https://yjay18.github.io/Kinoir/", label: "Kinoir" },
       { url: "https://github.com/yjay18/Cloud-Builder", label: "Cloud Builder" },
     ],
   },
@@ -414,33 +403,6 @@ export const projects: Project[] = [
       "Serialised models offline to reduce loading time.",
     ],
     links: [{ label: "View on GitHub", url: "https://github.com/yjay18/ClassifyingUSLegislation", kind: "repo" }],
-  },
-  {
-    slug: "linkflix",
-    title: "Linkflix",
-    eyebrow: "Local-First Media App",
-    subtitle:
-      "A native macOS media organizer and player with local network streaming, offline semantic search, and optional on-device AI.",
-    summary:
-      "A personal macOS media library built with Electron that keeps playback, search, subtitles, and local network sharing under the user's control.",
-    flagship: true,
-    categories: ["Systems", "AI/ML"],
-    roleFit: ["Software Engineering", "Desktop / Systems", "Applied AI"],
-    metrics: [
-      { value: "100%", label: "local on macOS" },
-      { value: "22 MB", label: "offline search model" },
-      { value: "HLS", label: "local network streaming" },
-    ],
-    detail:
-      "A native macOS media organizer and player built with Electron, Node.js, and vanilla JavaScript. Linkflix scans local media folders, plays files through native or HLS-backed web players, and adds optional offline semantic search, local subtitle generation, and Ollama-powered library assistance.",
-    stack: ["Electron", "Node.js", "JavaScript", "FFmpeg", "Whisper", "Transformers.js", "Ollama", "HLS"],
-    impact: [
-      "Streams a local media library to devices on the same network through on-the-fly HLS transcodes.",
-      "Searches library content offline with a pre-bundled MiniLM embedding model and local IndexedDB cache.",
-      "Generates subtitle sidecar files locally with Whisper, keeping audio and transcripts on-device.",
-      "Scans media folders, enriches titles from public metadata, and filters common library noise automatically.",
-    ],
-    links: [{ label: "View on GitHub", url: "https://github.com/yjay18/Linkflix", kind: "repo" }],
   },
   {
     slug: "personaforge",

@@ -6,7 +6,6 @@ import Icon from "../components/Icon.astro";
 import {
   archiveFilters,
   communityHighlights,
-  credibility,
   education,
   experience,
   flagshipProjects,
@@ -14,7 +13,6 @@ import {
   projects,
   publications,
   skillGroups,
-  targetRoles,
 } from "../data/portfolio";
 import { resolveUrl, withBase } from "../lib/links";
 import { Image } from "astro:assets";
@@ -25,17 +23,19 @@ const cv = withBase(profile.cvPath);
 const offerings = [
   {
     name: "Kinoir",
+    tone: "kinoir",
     logo: kinoirLogo,
     url: "https://yjay18.github.io/Kinoir/",
     description:
-      "Kinoir turns a folder of local movies and shows into a polished, private streaming library. It cleans messy filenames, finds metadata, and creates hover previews on-device. Grounded Ollama discovery and Kinoir Air keep exploration and home-network streaming local—open source, native to macOS, and account-free.",
+      "Kinoir turns a folder of local movies and shows into a polished, private streaming library. It cleans messy filenames, finds metadata, and creates hover previews on your Mac. Grounded Ollama discovery and Kinoir Air keep exploration and home network streaming private, open source, native to macOS, and free from accounts.",
   },
   {
     name: "Pit Crew",
+    tone: "pitcrew",
     logo: pitCrewLogo,
     url: "https://yjay18.github.io/ballxpit-run-tracker/",
     description:
-      "Pit Crew is a live BALL x PIT companion for faster decisions during a run. Track characters, balls, passives, levels, and available evolutions, then compare the upgrades the game offers against your current build. It builds on the original tracker by u/Cryphixi / Allena Oglivie, with credit preserved throughout.",
+      "Pit Crew is a live BALL x PIT companion for faster decisions during a run. Track characters, balls, passives, levels, and available evolutions, then compare the upgrades the game offers with your current build. Recommendations respond to what you already have so the next useful choice stays easy to see.",
   },
 ];
 ---
@@ -43,28 +43,6 @@ const offerings = [
 <BaseLayout>
   <main id="main">
     <Hero />
-
-    {/* ---- Credibility strip -------------------------------------------- */}
-    <section class="credibility" aria-label="Credibility">
-      <div class="container">
-        <div class="cred-row reveal">
-          <span class="cred-label">Trusted context</span>
-          {credibility.map((item) =>
-            item.href ? (
-              <a class="cred-item" href={resolveUrl(item.href)} target="_blank" rel="noreferrer">
-                <b>{item.label}</b>
-                {item.note && <span>{item.note}</span>}
-              </a>
-            ) : (
-              <span class="cred-item">
-                <b>{item.label}</b>
-                {item.note && <span>{item.note}</span>}
-              </span>
-            )
-          )}
-        </div>
-      </div>
-    </section>
 
     {/* ---- Solutions ---------------------------------------------------- */}
     <section class="section product-section" id="solutions" aria-labelledby="solutions-title">
@@ -77,20 +55,13 @@ const offerings = [
 
         <article class="solution-card reveal">
           <div class="solution-identity" aria-label="LeadFinder">
-            <div class="leadfinder-mark" aria-hidden="true">
-              <span>LF</span>
-              <i></i>
-            </div>
-            <div>
-              <span class="product-label">Privacy-first B2B discovery</span>
-              <h3>LeadFinder</h3>
-            </div>
+            <h3 class="leadfinder-wordmark"><span>Lead</span><strong>Finder</strong></h3>
           </div>
           <div class="solution-copy">
             <p>
-              A local-first workspace that finds public buying and expansion signals, verifies each
+              A private workspace that finds public buying and expansion signals, verifies each
               company, locates a real contact route, and scores the opportunity with AI. It can draft
-              a first-contact message and assist with the company&rsquo;s own form, but it never sends or
+              a first contact message and assist with the company&rsquo;s own form, but it never sends or
               submits anything for you.
             </p>
             <div class="solution-actions">
@@ -100,7 +71,6 @@ const offerings = [
               <a class="btn btn--secondary" href={withBase("leadfinder-demo/")}>
                 Try the interactive demo <Icon name="arrow-up-right" />
               </a>
-              <span class="demo-note">Built-in mock data · no backend</span>
             </div>
           </div>
         </article>
@@ -118,7 +88,7 @@ const offerings = [
 
         <div class="offerings-grid">
           {offerings.map((product) => (
-            <article class="offering-card reveal" tabindex="0">
+            <article class={`offering-card offering-card--${product.tone} reveal`} tabindex="0">
               <div class="offering-logo-stage">
                 <Image
                   src={product.logo}
@@ -352,11 +322,12 @@ const offerings = [
         <div class="contact-lead reveal">
           <span class="eyebrow">09 · Contact</span>
           <h2 id="contact-title" style="margin-top:0.9rem">
-            Interested in systems that are both <span class="accent-word">researched</span> and built?
+            Have something <span class="accent-word">useful</span> to build?
           </h2>
           <p>
-            I'm open to roles across AI/ML, NLP, and LLM systems, as well as software engineering
-            more generally, where I can contribute from research and evaluation through to production.
+            If you have a practical software problem, a product idea or an open source collaboration
+            in mind, I am happy to talk. I work across software engineering, data and applied AI,
+            from the first decisions through to dependable delivery.
           </p>
           <div class="contact-actions">
             <a class="btn btn--primary" href={`mailto:${profile.email}`}>
@@ -372,27 +343,23 @@ const offerings = [
           </div>
         </div>
 
-        <aside class="recruiter reveal" aria-label="Recruiter summary">
-          <div class="recruiter-head">
-            <span class="rh-title">Recruiter summary</span>
-            <span class="avail">{profile.availability}</span>
-          </div>
+        <aside class="profile-card reveal" aria-label="Professional profile">
           <dl>
             <div>
-              <dt>Roles</dt>
-              <dd>
-                <div class="roles">
-                  {targetRoles.map((r) => <span>{r}</span>)}
-                </div>
-              </dd>
+              <dt>Focus</dt>
+              <dd>Software products, applied AI and data</dd>
             </div>
             <div>
-              <dt>Location</dt>
+              <dt>Experience</dt>
+              <dd>Ten years across community projects, research and industry</dd>
+            </div>
+            <div>
+              <dt>Based</dt>
               <dd>{profile.location}</dd>
             </div>
             <div>
-              <dt>Degree</dt>
-              <dd>{profile.degree} · {profile.degreeNote}</dd>
+              <dt>Education</dt>
+              <dd>Bachelors and Masters in Computer Science, Trinity College Dublin · {profile.degreeNote}</dd>
             </div>
             <div>
               <dt>Email</dt>
@@ -403,7 +370,7 @@ const offerings = [
               <dd>{profile.lastUpdated}</dd>
             </div>
           </dl>
-          <div class="recruiter-actions">
+          <div class="profile-actions">
             <a class="btn btn--primary" href={cv} target="_blank" rel="noreferrer">
               <Icon name="download" /> CV
             </a>

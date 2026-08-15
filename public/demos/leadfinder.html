@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>LeadFinder — private, local B2B lead discovery</title>
+<title>LeadFinder private local B2B lead discovery</title>
 <style>
   :root{
     --ink:#26352a; --graphite:#4a5c45; --mist:#6b7a64; --faint:#879180;
@@ -22,15 +22,13 @@
   /* header */
   header{position:sticky;top:0;z-index:40;background:rgba(238,240,230,.78);border-bottom:1px solid var(--line2);backdrop-filter:saturate(1.8) blur(24px);-webkit-backdrop-filter:saturate(1.8) blur(24px)}
   .bar{display:flex;align-items:center;gap:18px;height:60px}
-  .logo{display:flex;align-items:center;gap:10px;font-family:"Iowan Old Style",Palatino,Georgia,serif;font-size:18px;font-weight:600}
-  .logo .mark{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:linear-gradient(145deg,#3d6049,#203529);color:#fff;font-size:13px;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 10px 22px -14px rgba(38,53,42,.7)}
+  .logo{display:flex;align-items:baseline;font-family:"Iowan Old Style",Palatino,Georgia,serif;font-size:22px;font-weight:400;letter-spacing:-.04em}
+  .logo b{margin-left:.12em;color:var(--moss);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:.78em;font-weight:700;letter-spacing:-.05em}
   nav.tabs{display:flex;gap:2px;margin-left:auto}
   .tabs button{border:0;background:none;color:var(--graphite);padding:7px 12px;border-radius:5px;font-size:13px}
   .tabs button:hover{background:var(--wash);color:var(--ink)}
   .tabs button.active{background:linear-gradient(180deg,#385740,#2f4a3a);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 20px -14px rgba(38,53,42,.8)}
   .rightset{display:flex;gap:8px;align-items:center;margin-left:auto}
-  .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:5px 11px;font-size:12px;color:var(--mist);background:var(--wash)}
-  .chip .dot{width:6px;height:6px;border-radius:50%;background:var(--moss)}
   .ghost{border:1px solid var(--line2);background:none;border-radius:5px;padding:6px 11px;font-size:12.5px;color:var(--graphite)}
   .ghost:hover{border-color:var(--accent);color:var(--accent)}
 
@@ -150,7 +148,6 @@
     .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
     .metric{padding:13px 12px 15px}
     .metric .v{font-size:26px}
-    .chip{display:none}
     .rightset{gap:5px}
     .ghost{padding-inline:9px}
     .detail .ft{flex-wrap:wrap}
@@ -165,7 +162,7 @@
 
 <header>
   <div class="wrap bar">
-    <div class="logo"><span class="mark">LF</span> LeadFinder</div>
+    <div class="logo" data-tour="ai" aria-label="LeadFinder"><span>Lead</span><b>Finder</b></div>
     <nav class="tabs" data-tour="nav" id="tabs">
       <button data-page="overview" class="active">Overview</button>
       <button data-page="discovery">Discovery</button>
@@ -174,7 +171,6 @@
       <button data-page="outreach">Outreach</button>
     </nav>
     <div class="rightset">
-      <span class="chip" data-tour="ai"><span class="dot"></span> AI ready</span>
       <button class="ghost" onclick="startTour()">Take the tour</button>
     </div>
   </div>
@@ -186,7 +182,7 @@
     <div class="metrics" data-tour="metrics">
       <div class="metric"><div class="k">Companies found</div><div class="v" id="m-count">0</div><div class="s">In your workspace</div></div>
       <div class="metric"><div class="k">Ways to contact</div><div class="v" id="m-routes">0</div><div class="s">Email, form, or phone</div></div>
-      <div class="metric"><div class="k">Best-fit leads</div><div class="v" id="m-fit">0</div><div class="s">Score 80 and up</div></div>
+      <div class="metric"><div class="k">Best fit leads</div><div class="v" id="m-fit">0</div><div class="s">Score 80 and up</div></div>
       <div class="metric"><div class="k">Contact forms</div><div class="v" id="m-forms">0</div><div class="s">Ready to fill in</div></div>
       <div class="metric"><div class="k">Emails found</div><div class="v" id="m-emails">0</div><div class="s">Published addresses</div></div>
       <div class="metric"><div class="k">Fresh signals</div><div class="v" id="m-fresh">0</div><div class="s">Last 90 days</div></div>
@@ -198,7 +194,7 @@
         <p class="sub muted">Public buying/expansion signals → the company's official site → a way to get in touch.</p>
         <div class="row3">
           <div><label class="fld">Data source</label>
-            <select><option>Expansion &amp; hiring signals</option><option>Funding announcements</option><option>Job-board activity</option><option>Directory import</option></select></div>
+            <select><option>Expansion &amp; hiring signals</option><option>Funding announcements</option><option>Job board activity</option><option>Directory import</option></select></div>
           <div><label class="fld">Industry</label>
             <select><option>All industries</option><option>Manufacturing</option><option>SaaS</option><option>Logistics</option><option>Healthcare</option></select></div>
           <div><label class="fld">Max leads</label><select><option>10</option><option>25</option><option>50</option></select></div>
@@ -228,7 +224,7 @@
   <!-- COMPANIES -->
   <section id="p-companies" class="hide">
     <h1 class="page">Companies</h1>
-    <p class="sub">Your confirmed directory — every company you can act on, with the sources behind it.</p>
+    <p class="sub">Every company you can act on, with the sources behind it.</p>
     <div id="comp"></div>
   </section>
 
@@ -245,20 +241,20 @@
     <p class="sub">Draft a first message, then let the assistant fill the company's own contact form. Nothing is ever sent automatically.</p>
     <div class="grid2">
       <div class="panel">
-        <h2>Composer</h2><p class="sub muted">Pick a company, language and tone — then draft.</p>
+        <h2>Composer</h2><p class="sub muted">Pick a company, language and tone. Then draft.</p>
         <div class="row3"><div><label class="fld">Company</label><select id="oc"></select></div>
           <div><label class="fld">Tone</label><select><option>Formal</option><option>Warm</option><option>Direct</option></select></div>
           <div><label class="fld">Language</label><select><option>English</option><option>Local</option><option>Bilingual</option></select></div></div>
         <button class="btn" style="margin-top:6px" onclick="draft()">Write draft with AI</button>
-        <textarea id="draftbox" rows="7" style="width:100%;margin-top:12px;border:1px solid var(--line2);border-radius:5px;padding:10px;font:inherit;font-size:13px" placeholder="Your draft appears here — edit freely. Nothing is sent until you send it."></textarea>
+        <textarea id="draftbox" rows="7" style="width:100%;margin-top:12px;border:1px solid var(--line2);border-radius:5px;padding:10px;font:inherit;font-size:13px" placeholder="Your draft appears here. Edit freely. Nothing is sent until you send it."></textarea>
       </div>
       <div class="panel">
-        <h2>Contact-form assistant</h2><p class="sub muted">Fills the company's own web form for you. You review and press send.</p>
+        <h2>Contact form assistant</h2><p class="sub muted">Fills the company's own web form for you. You review and press send.</p>
         <ol style="padding-left:18px;font-size:12.5px;color:var(--graphite);line-height:1.9">
           <li>Open the company's form</li><li>Read its fields</li><li>Match your details with AI</li>
           <li>Fill it in (outlined for review)</li><li><b>You</b> check and press the site's send button</li>
         </ol>
-        <div class="promise"><b>Never auto-submits.</b> The assistant never presses submit, ticks a consent box, or solves a CAPTCHA.</div>
+        <div class="promise"><b>Never submits automatically.</b> The assistant never presses submit, ticks a consent box, or solves a CAPTCHA.</div>
       </div>
     </div>
   </section>
@@ -272,14 +268,14 @@
     <div class="mh"><div style="font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)">Welcome</div>
       <h3 style="margin-top:6px">Meet LeadFinder</h3></div>
     <div class="mb">
-      <p>LeadFinder finds companies showing buying or expansion intent, confirms who they are, reads their sites for a way to get in touch, and drafts your first message — privately, on your own machine.</p>
+      <p>LeadFinder finds companies showing buying or expansion intent, confirms who they are, reads their sites for a way to get in touch, and drafts your first message privately on your own machine.</p>
       <div class="promise">
         <div><b>Nothing is invented.</b> Emails and phones are only shown when found on a real page, with a link.</div>
-        <div style="margin-top:6px"><b>You always press send.</b> The app drafts and fills forms — it never sends for you.</div>
+        <div style="margin-top:6px"><b>You always press send.</b> The app drafts and fills forms, but it never sends for you.</div>
       </div>
     </div>
     <div class="mf"><button class="ghost" onclick="closeWelcome()">Skip</button>
-      <button class="btn" onclick="closeWelcome();startTour()">Take the 60-second tour</button></div>
+      <button class="btn" onclick="closeWelcome();startTour()">Take the 60 second tour</button></div>
   </div>
 </div>
 
@@ -301,11 +297,11 @@
 /* ---------- demo data (generic) ---------- */
 const DATA = [
   {n:"Northwind Robotics", d:"northwind-robotics.com", ind:"Manufacturing", loc:"Austin, TX", route:"Email + form", rk:"ok", email:"sales@northwind-robotics.com", form:"/contact", score:92, fit:"High",
-    why:"Announced a new 40,000 sq ft plant and 120 new roles.", sum:"Builds warehouse automation arms; opening a second facility and hiring across engineering — strong expansion intent."},
+    why:"Announced a new 40,000 sq ft plant and 120 new roles.", sum:"Builds warehouse automation arms, with a second facility opening and engineering hiring underway."},
   {n:"Marlow Foods Group", d:"marlowfoods.co", ind:"Food & Bev", loc:"Leeds, UK", route:"Contact form", rk:"form", form:"/enquiry", score:74, fit:"Medium",
-    why:"Press release on entering two new export markets.", sum:"Mid-market food producer expanding exports; a contact form is the only public route."},
+    why:"Press release on entering two new export markets.", sum:"Mid market food producer expanding exports; a contact form is the only public route."},
   {n:"Aster Health Systems", d:"asterhealth.io", ind:"Healthcare", loc:"Pune, IN", route:"Email found", rk:"ok", email:"partnerships@asterhealth.io", score:88, fit:"High",
-    why:"Series B funding, hiring a country manager.", sum:"Digital-health platform, freshly funded and staffing up for a new region."},
+    why:"Series B funding, hiring a country manager.", sum:"Digital health platform, freshly funded and staffing up for a new region."},
   {n:"Copperline Logistics", d:"copperline.com", ind:"Logistics", loc:"Rotterdam, NL", route:"Phone only", rk:"none", phone:"+31 10 555 0148", score:61, fit:"Medium",
     why:"New distribution hub announced.", sum:"Freight operator adding a hub; only a phone number is published."},
   {n:"Bluepeak SaaS", d:"bluepeak.app", ind:"SaaS", loc:"Toronto, CA", route:"Email + form", rk:"ok", email:"hello@bluepeak.app", form:"/demo", score:83, fit:"High",
@@ -330,10 +326,10 @@ function runScan(){
   btn.disabled=true; let p=0; msg.textContent="Reading signals and checking official sites…";
   const t=setInterval(()=>{ p+=12; bar.style.width=Math.min(p,100)+'%';
     if(p>=100){ clearInterval(t); scanned=DATA.length; render(); btn.disabled=false;
-      msg.textContent="Scan complete — "+DATA.length+" companies, "+DATA.filter(c=>c.rk!=='none').length+" contactable.";
+      msg.textContent="Scan complete: "+DATA.length+" companies, "+DATA.filter(c=>c.rk!=='none').length+" contactable.";
       go('discovery'); } },140);
-  const acts=["Signal matched — Northwind Robotics","Official site resolved — bluepeak.app","Contact form found — marlowfoods.co","Email extracted — asterhealth.io","Identity verified — 6 companies"];
-  document.getElementById('activity').innerHTML = acts.map((a,i)=>`<li><span class="t">${a.split(' — ')[0]}</span> <span class="d">— ${a.split(' — ')[1]||''}</span></li>`).join('');
+  const acts=["Signal matched: Northwind Robotics","Official site resolved: bluepeak.app","Contact form found: marlowfoods.co","Email extracted: asterhealth.io","Identity verified: 6 companies"];
+  document.getElementById('activity').innerHTML = acts.map((a)=>`<li><span class="t">${a.split(': ')[0]}</span> <span class="d">${a.split(': ')[1]||''}</span></li>`).join('');
 }
 
 /* ---------- tables ---------- */
@@ -376,9 +372,9 @@ function openDetail(i){
         <div class="quote">${c.why}</div>
         <div class="muted" style="font-size:11px" class="mono">Local model · scored on verified facts</div></div>
       <div class="sect"><h4>Contact routes</h4><div class="kv">
-        <div class="lbl">Email</div><div class="mono">${c.email||'<span class="muted">—</span>'}</div>
-        <div class="lbl">Contact form</div><div>${c.form?('<span class="mono">'+c.d+c.form+'</span>'):'<span class="muted">—</span>'}</div>
-        <div class="lbl">Phone</div><div class="mono">${c.phone||'<span class="muted">—</span>'}</div></div></div>
+        <div class="lbl">Email</div><div class="mono">${c.email||'<span class="muted">Not found</span>'}</div>
+        <div class="lbl">Contact form</div><div>${c.form?('<span class="mono">'+c.d+c.form+'</span>'):'<span class="muted">Not found</span>'}</div>
+        <div class="lbl">Phone</div><div class="mono">${c.phone||'<span class="muted">Not found</span>'}</div></div></div>
       <div class="sect"><h4>Why this company surfaced</h4><div class="quote">${c.why}</div>
         <div class="muted" style="font-size:11.5px">Source: public announcement · linked in the app</div></div>
     </div>
@@ -404,8 +400,8 @@ const STEPS=[
   {page:'overview',target:'scan',title:'Find leads',body:'Pick a source and press Find. The app reads public buying/expansion signals, resolves each company\'s site, and looks for a way to contact them.',place:'top'},
   {page:'discovery',target:'table',title:'Discovery',body:'New finds land here with a fit score and a contact route. Click any company to open its full profile.',place:'top'},
   {page:'companies',title:'Companies',body:'Confirmed companies collect in your directory, each with the real sources behind it kept underneath.'},
-  {page:'outreach',target:'outreach',title:'Outreach',body:'Draft a first message, then let the assistant fill the company\'s own form. It never sends or submits on its own — you always press send.',place:'top'},
-  {page:'overview',target:'ai',title:'Private & local',body:'The AI runs on your own machine. Nothing you scan or write is uploaded, and facts are found — never invented.',place:'bottom'},
+  {page:'outreach',target:'outreach',title:'Outreach',body:'Draft a first message, then let the assistant fill the company\'s own form. It never sends or submits on its own. You always press send.',place:'top'},
+  {page:'overview',target:'ai',title:'Private and local',body:'The AI runs on your own machine. Nothing you scan or write is uploaded, and facts are found rather than invented.',place:'bottom'},
   {page:'overview',title:'You\'re ready',body:'That\'s the tour. Press "Find leads" on the Overview to see it in action with sample data.'},
 ];
 let ti=0;

@@ -21,11 +21,10 @@ const capabilities = [
     <section class="demo-intro" aria-labelledby="demo-title">
       <div class="container demo-intro-grid">
         <div>
-          <span class="eyebrow">Interactive product demo</span>
           <h1 id="demo-title">Meet <span class="accent-word">LeadFinder</span>.</h1>
           <p>
             See how a team can move from a public growth signal to a verified company, a real
-            contact route, and a first draft&mdash;without giving up control of the send button.
+            contact route, and a first draft while keeping control of the send button.
           </p>
           <div class="demo-intro-actions">
             <a class="btn btn--secondary" href={solutionsUrl}>
@@ -41,7 +40,8 @@ const capabilities = [
           {capabilities.map(([title, description], index) => (
             <li>
               <span>{String(index + 1).padStart(2, "0")}</span>
-              <div><b>{title}</b><small>{description}</small></div>
+              <b>{title}</b>
+              <small>{description}</small>
             </li>
           ))}
         </ul>
@@ -53,9 +53,7 @@ const capabilities = [
         <div class="demo-stage-bar">
           <div>
             <span id="demo-stage-title">Live walkthrough</span>
-            <small>All companies, signals, scores, and contact details are mock data.</small>
           </div>
-          <span class="demo-status"><i></i> Runs locally in your browser</span>
         </div>
         <div class="demo-frame">
           <iframe
@@ -80,10 +78,10 @@ const capabilities = [
     display: grid;
     grid-template-columns: minmax(0, 1.08fr) minmax(310px, 0.92fr);
     gap: clamp(2rem, 6vw, 5rem);
-    align-items: end;
+    align-items: center;
   }
   .demo-intro h1 {
-    margin-top: 0.85rem;
+    margin-top: 0;
     font-family: var(--font-serif);
     font-size: clamp(2.7rem, 2rem + 3vw, 4.8rem);
     line-height: 0.98;
@@ -105,33 +103,28 @@ const capabilities = [
   }
   .demo-capabilities {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    border-radius: var(--r-lg);
-    background: rgba(255, 255, 255, 0.4);
-    box-shadow: var(--shadow), inset 0 1px 0 #fff;
-    backdrop-filter: saturate(2) blur(24px);
-    -webkit-backdrop-filter: saturate(2) blur(24px);
+    gap: 0.65rem;
   }
   .demo-capabilities li {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0.7rem;
-    min-height: 112px;
-    padding: 1rem;
-    border-right: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-  .demo-capabilities li:nth-child(2n) {
-    border-right: 0;
-  }
-  .demo-capabilities li:nth-last-child(-n + 2) {
-    border-bottom: 0;
+    grid-template-columns: 2.2rem minmax(78px, 0.45fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(0.7rem, 1.5vw, 1rem);
+    min-height: 72px;
+    padding: 0.85rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 18px;
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.28)),
+      rgba(255, 255, 255, 0.34);
+    box-shadow: 0 16px 34px -30px rgba(38, 53, 42, 0.7), inset 0 1px 0 #fff;
+    backdrop-filter: saturate(2) blur(20px);
+    -webkit-backdrop-filter: saturate(2) blur(20px);
   }
   .demo-capabilities li > span {
     font-family: var(--font-mono);
     font-size: 0.66rem;
+    font-weight: 600;
     color: var(--terra-ink);
   }
   .demo-capabilities b,
@@ -140,10 +133,9 @@ const capabilities = [
   }
   .demo-capabilities b {
     color: var(--ink);
-    font-size: 0.92rem;
+    font-size: 0.98rem;
   }
   .demo-capabilities small {
-    margin-top: 0.25rem;
     color: var(--muted);
     font-size: 0.77rem;
     line-height: 1.45;
@@ -166,35 +158,12 @@ const capabilities = [
     backdrop-filter: saturate(2) blur(24px);
     -webkit-backdrop-filter: saturate(2) blur(24px);
   }
-  .demo-stage-bar span,
-  .demo-stage-bar small {
+  .demo-stage-bar span {
     display: block;
   }
   .demo-stage-bar span {
     color: var(--ink);
     font-weight: 600;
-  }
-  .demo-stage-bar small {
-    margin-top: 0.1rem;
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-  .demo-status {
-    display: inline-flex !important;
-    align-items: center;
-    gap: 0.45rem;
-    flex: 0 0 auto;
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    font-weight: 400 !important;
-    color: var(--muted) !important;
-  }
-  .demo-status i {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--slate);
-    box-shadow: 0 0 0 4px var(--slate-soft);
   }
   .demo-frame {
     position: relative;
@@ -231,18 +200,14 @@ const capabilities = [
       width: 100%;
       justify-content: center;
     }
-    .demo-capabilities {
-      grid-template-columns: 1fr;
+    .demo-capabilities li {
+      grid-template-columns: 2rem 1fr;
+      min-height: 82px;
+      padding: 0.8rem 0.9rem;
     }
-    .demo-capabilities li,
-    .demo-capabilities li:nth-child(2n),
-    .demo-capabilities li:nth-last-child(-n + 2) {
-      min-height: 86px;
-      border-right: 0;
-      border-bottom: 1px solid var(--line);
-    }
-    .demo-capabilities li:last-child {
-      border-bottom: 0;
+    .demo-capabilities small {
+      grid-column: 2;
+      margin-top: -0.45rem;
     }
     .demo-stage > .container {
       padding-inline: 0;
@@ -251,9 +216,6 @@ const capabilities = [
       align-items: flex-start;
       border-radius: 0;
       padding-inline: var(--gutter);
-    }
-    .demo-status {
-      display: none !important;
     }
     .demo-frame {
       min-height: 820px;
