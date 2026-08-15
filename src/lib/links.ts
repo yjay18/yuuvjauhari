@@ -2,7 +2,8 @@
 // is required for correct paths when the site is served under a sub-path
 // (e.g. GitHub Pages project sites).
 
-const BASE = import.meta.env.BASE_URL;
+const configuredBase = import.meta.env.BASE_URL || "/";
+const BASE = configuredBase.endsWith("/") ? configuredBase : `${configuredBase}/`;
 
 export const isExternal = (url: string): boolean => /^(https?:)?\/\/|^mailto:|^tel:/.test(url);
 
