@@ -439,6 +439,7 @@ h4 {
 .reveal.is-visible {
   opacity: 1;
   transform: none;
+  will-change: auto;
 }
 
 /* =========================================================================
@@ -1178,7 +1179,7 @@ body.nav-open .nav-toggle span::after {
   display: grid;
   place-items: center;
   color: var(--green);
-  transition: transform 420ms var(--ease-out);
+  transition: transform 160ms var(--ease-out);
 }
 .pcard-toggle .icon {
   width: 1rem;
@@ -1190,25 +1191,26 @@ body.nav-open .nav-toggle span::after {
   transform: rotate(180deg);
 }
 .pcard-expand {
-  display: grid;
+  display: none;
   grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
   gap: 0 clamp(1.6rem, 4vw, 3.5rem);
-  max-height: 0;
-  overflow: hidden;
-  padding-inline: clamp(1.2rem, 3vw, 2rem);
-  opacity: 0;
-  visibility: hidden;
-  transition: max-height 560ms var(--ease-out), opacity 220ms var(--ease),
-    padding-bottom 560ms var(--ease-out), visibility 0s linear 560ms;
+  padding: 0 clamp(1.2rem, 3vw, 2rem) clamp(1.2rem, 3vw, 2rem);
 }
 .pcard:hover .pcard-expand,
 .pcard:focus .pcard-expand,
 .pcard:focus-within .pcard-expand {
-  max-height: 900px;
-  padding-bottom: clamp(1.2rem, 3vw, 2rem);
-  opacity: 1;
-  visibility: visible;
-  transition-delay: 0s;
+  display: grid;
+  animation: pcard-details-in 160ms var(--ease-out) both;
+}
+@keyframes pcard-details-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 .pcard-body {
   display: flex;
@@ -1251,8 +1253,6 @@ body.nav-open .nav-toggle span::after {
     radial-gradient(140% 100% at 0% 0%, rgba(255, 255, 255, 0.46), transparent 58%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(47, 93, 92, 0.05));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 10px 28px -24px rgba(38, 53, 42, 0.42);
-  backdrop-filter: saturate(1.8) blur(14px);
-  -webkit-backdrop-filter: saturate(1.8) blur(14px);
 }
 .pcard-panel-label {
   display: inline-flex;
@@ -2225,7 +2225,7 @@ body::after {
   background-size: 160px 160px;
 }
 
-/* Slow ambient light drift behind everything (motion 4 — heavily gated) */
+/* Static ambient light field behind everything */
 body::before {
   content: "";
   position: fixed;
@@ -2237,16 +2237,6 @@ body::before {
     radial-gradient(52% 52% at 86% 12%, rgba(168, 98, 63, 0.28), transparent 66%),
     radial-gradient(50% 50% at 70% 94%, rgba(47, 74, 58, 0.26), transparent 68%),
     radial-gradient(44% 44% at 4% 78%, rgba(63, 93, 102, 0.26), transparent 68%);
-  animation: ambient-drift 46s ease-in-out infinite alternate;
-  will-change: transform;
-}
-@keyframes ambient-drift {
-  from {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  to {
-    transform: translate3d(2.5%, -2%, 0) scale(1.1);
-  }
 }
 
 /* Hero headline clip-reveal (motion 5) — pure CSS load animation, independent
@@ -2377,9 +2367,7 @@ body::before {
 }
 /* Content-dense flagship cards stay a touch more solid for readability */
 .pcard {
-  background-color: rgba(255, 255, 255, 0.56);
-  backdrop-filter: saturate(2.2) blur(26px);
-  -webkit-backdrop-filter: saturate(2.2) blur(26px);
+  background-color: rgba(250, 251, 246, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 1);
 }
@@ -2412,7 +2400,6 @@ body::before {
 }
 
 /* ---- Pointer-reactive sheen (background layer, behind text) ------------ */
-.pcard,
 .xp,
 .edu-card,
 .acard {
@@ -2667,12 +2654,7 @@ body::before {
   .pcard-expand {
     grid-template-columns: 1fr;
     gap: 1rem;
-    padding-inline: 1rem;
-  }
-  .pcard:hover .pcard-expand,
-  .pcard:focus .pcard-expand,
-  .pcard:focus-within .pcard-expand {
-    padding-bottom: 1rem;
+    padding: 0 1rem 1rem;
   }
 }
 
@@ -2730,8 +2712,5 @@ body::before {
   .acard.is-appearing {
     opacity: 1 !important;
     transform: none !important;
-  }
-  body::before {
-    animation: none !important;
   }
 }

@@ -340,7 +340,7 @@ function initCountUp(): void {
 function initCardGlow(): void {
   if (reducedMotion || !window.matchMedia("(pointer: fine)").matches) return;
   const cards = Array.from(
-    document.querySelectorAll<HTMLElement>(".pcard, .xp, .edu-card, .skill-card, a.acard")
+    document.querySelectorAll<HTMLElement>(".xp, .edu-card, .skill-card, a.acard")
   );
   cards.forEach((card) => {
     let raf = 0;
