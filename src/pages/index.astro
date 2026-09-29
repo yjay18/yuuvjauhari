@@ -12,30 +12,53 @@ import {
   profile,
   projects,
   publications,
+  sideGigs,
   skillGroups,
 } from "../data/portfolio";
 import { resolveUrl, withBase } from "../lib/links";
 import { Image } from "astro:assets";
 import kinoirLogo from "../../products/kinoir/logo copy.png";
 import pitCrewLogo from "../../products/pitcrew/pit-crew-logo copy.png";
+import randomsLogo from "../../products/randoms/randoms-logo.png";
+import gitlinesLogo from "../../products/gitlines/gitlines-logo.png";
 
 const cv = withBase(profile.cvPath);
 const offerings = [
   {
     name: "Kinoir",
     tone: "kinoir",
+    label: "Free · Open source",
     logo: kinoirLogo,
     url: "https://yjay18.github.io/Kinoir/",
     description:
       "Kinoir turns a folder of local movies and shows into a polished, private streaming library. It cleans messy filenames, finds metadata, and creates hover previews on your Mac. Grounded Ollama discovery and Kinoir Air keep exploration and home network streaming private, open source, native to macOS, and free from accounts.",
   },
   {
+    name: "Randoms",
+    tone: "randoms",
+    label: "Free · Browser games",
+    logo: randomsLogo,
+    url: "https://randoms.games/",
+    description:
+      "Randoms is a library of more than 30 handcrafted browser games, all made by me. Question eight paper neighbours in Common Area, breed and duel dragons in Dragon Sim, or vote on the fate of a fruit fly driven by its complete connectome in The Fly. Each game is built for quick sessions, and Randomize shuffles the whole library when you want something new.",
+  },
+  {
     name: "Pit Crew",
     tone: "pitcrew",
+    label: "Free · Open source",
     logo: pitCrewLogo,
     url: "https://yjay18.github.io/ballxpit-run-tracker/",
     description:
       "Pit Crew is a live BALL x PIT companion for faster decisions during a run. Track characters, balls, passives, levels, and available evolutions, then compare the upgrades the game offers with your current build. Recommendations respond to what you already have so the next useful choice stays easy to see.",
+  },
+  {
+    name: "Gitlines",
+    tone: "gitlines",
+    label: "Free · Source available",
+    logo: gitlinesLogo,
+    url: "https://yjay18.github.io/Gitlines/",
+    description:
+      "Gitlines is a native macOS widget that keeps your GitHub activity on the desktop. It shows exact commits, additions, deletions and repository rankings, counted across every branch you can access. The host app keeps your GitHub token in the Keychain, and the widget only ever receives a display-ready snapshot.",
   },
 ];
 ---
@@ -101,7 +124,7 @@ const offerings = [
               </div>
               <div class="offering-reveal">
                 <div class="offering-copy">
-                  <span class="product-label">Free · Open source</span>
+                  <span class="product-label">{product.label}</span>
                   <h3>{product.name}</h3>
                   <p>{product.description}</p>
                   <a class="case-link" href={product.url} target="_blank" rel="noreferrer">
@@ -161,6 +184,30 @@ const offerings = [
                 <p class="xp-summary">{xp.summary}</p>
               </div>
             </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ---- Side gigs ---------------------------------------------------- */}
+    <section class="section" id="side-gigs" aria-labelledby="gigs-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="index">On the side</span>
+          <h2 class="section-title" id="gigs-title">Side Gigs</h2>
+        </div>
+
+        <div class="gig-grid">
+          {sideGigs.map((gig) => (
+            <a class="gig-card reveal" href={gig.url} target="_blank" rel="noreferrer">
+              <span class="gig-role">{gig.role}</span>
+              <h3>{gig.org}</h3>
+              {gig.blurb && <p>{gig.blurb}</p>}
+              <span class="gig-go">
+                {new URL(gig.url).hostname.replace(/^www\./, "")}
+                <Icon name="arrow-up-right" />
+              </span>
+            </a>
           ))}
         </div>
       </div>
