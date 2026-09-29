@@ -41,42 +41,61 @@ const cv = withBase(profile.cvPath);
         </span>
       </div>
 
+      <!-- a nudge toward the animated version: the arrow points at the peek card (right on desktop, below when stacked) -->
+      <p class="reel-callout reveal">
+        <span class="reel-note">Psst. There are two animated versions.</span>
+        <svg class="reel-arrow reel-arrow--side" viewBox="0 0 132 64" aria-hidden="true">
+          <path class="reel-arrow-line" pathLength="100" d="M6 44 C 28 58, 64 58, 88 40 S 116 14, 124 8" />
+          <path class="reel-arrow-head" pathLength="100" d="M109 9 L124 8 L119 22" />
+        </svg>
+        <svg class="reel-arrow reel-arrow--down" viewBox="0 0 60 76" aria-hidden="true">
+          <path class="reel-arrow-line" pathLength="100" d="M8 6 C 30 4, 44 20, 40 40 S 34 62, 34 70" />
+          <path class="reel-arrow-head" pathLength="100" d="M26 58 L34 70 L42 58" />
+        </svg>
+      </p>
     </div>
 
-    <aside class="practice-card reveal" aria-labelledby="practice-title">
-      <div class="practice-intro">
-        <h2 id="practice-title">Built around useful work.</h2>
-        <p>Clear purpose, careful engineering and sensible maintenance.</p>
+    <!-- two animated versions: a card that flips between the 2D sketchbook and the 3D island; each opens with its own transition -->
+    <div class="peek reveal">
+      <div class="peek-switch" role="group" aria-label="Choose an animated version">
+        <button type="button" data-mode="2d" aria-pressed="true">2D sketchbook</button>
+        <button type="button" data-mode="3d" aria-pressed="false">3D island</button>
       </div>
-
-      <div class="practice-list">
-        <div class="practice-row">
-          <span>01</span>
-          <div>
-            <b>Software for teams</b>
-            <small>Practical tools shaped around how a business already works.</small>
-          </div>
-        </div>
-        <div class="practice-row">
-          <span>02</span>
-          <div>
-            <b>Community products</b>
-            <small>Focused open source tools for specific, real needs.</small>
-          </div>
-        </div>
-        <div class="practice-row">
-          <span>03</span>
-          <div>
-            <b>Applied AI and data</b>
-            <small>Used where it improves the product, with people in control.</small>
-          </div>
-        </div>
-      </div>
-
-      <div class="practice-footer">
-        <span>Based in Dublin</span>
-        <a href={withBase("#solutions")}>See solutions <Icon name="arrow-down" /></a>
-      </div>
-    </aside>
+      <a class="reel-peek" href={withBase("reel/")} data-mode="2d" data-href-2d={withBase("reel/")} data-href-3d={withBase("world/")}
+         aria-label="Open the 2D sketchbook version of this portfolio">
+        <span class="peek-inner">
+          <span class="peek-side peek-side--2d">
+            <span class="reel-peek-frame">
+              <video data-peek="2d" muted loop playsinline preload="metadata" poster={withBase("media/reel-peek.jpg")} aria-hidden="true">
+                <source src={withBase("media/reel-peek.webm")} type="video/webm" />
+                <source src={withBase("media/reel-peek.mp4")} type="video/mp4" />
+              </video>
+            </span>
+            <span class="reel-peek-caption">
+              <span>
+                <span class="reel-peek-eyebrow">Animated version</span>
+                <span class="reel-peek-title">Step inside the sketchbook</span>
+              </span>
+              <Icon name="arrow-up-right" />
+            </span>
+          </span>
+          <span class="peek-side peek-side--3d" aria-hidden="true">
+            <span class="reel-peek-frame">
+              <video data-peek="3d" muted loop playsinline preload="none" poster={withBase("media/world-peek.jpg")} aria-hidden="true">
+                <source src={withBase("media/world-peek.webm")} type="video/webm" />
+                <source src={withBase("media/world-peek.mp4")} type="video/mp4" />
+              </video>
+            </span>
+            <span class="reel-peek-caption">
+              <span>
+                <span class="reel-peek-eyebrow">Animated version</span>
+                <span class="reel-peek-title">Explore the island</span>
+              </span>
+              <Icon name="arrow-up-right" />
+            </span>
+          </span>
+        </span>
+      </a>
+    </div>
   </div>
 </section>

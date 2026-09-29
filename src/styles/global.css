@@ -706,7 +706,6 @@ body.nav-open .nav-toggle span::after {
 .hero-copy > .reveal:nth-child(3) { transition-delay: 160ms; }
 .hero-copy > .reveal:nth-child(4) { transition-delay: 220ms; }
 .hero-copy > .reveal:nth-child(5) { transition-delay: 280ms; }
-.practice-card.reveal { transition-delay: 160ms; }
 
 .hero-title {
   font-family: var(--font-serif);
@@ -744,6 +743,22 @@ body.nav-open .nav-toggle span::after {
   align-items: center;
   gap: 0.75rem;
 }
+/* the nudge toward the animated portfolio: an italic note and an ink arrow that draws itself in toward the
+   peek card (to the right on desktop, downward when the hero stacks), then keeps nudging that way */
+.reel-callout { position: relative; display: flex; align-items: flex-end; gap: 0.3rem; margin-top: 1.9rem; }
+.reel-note { font: italic 600 1.35rem/1.1 var(--font-serif); color: var(--terra-ink); rotate: -2deg; padding-bottom: 0.3rem; }
+.reel-arrow { --nudge: 6px, 0px; flex: none; width: 104px; height: 52px; margin-bottom: 0.5rem; overflow: visible; }
+.reel-arrow--down { --nudge: 0px, 6px; display: none; width: 46px; height: 58px; margin: 0.4rem 0 0 2.5rem; }
+.reel-arrow path { fill: none; stroke: var(--terra); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 100; stroke-dashoffset: 100; }
+.reel-callout.is-visible .reel-arrow-line { animation: reel-draw 0.9s 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+.reel-callout.is-visible .reel-arrow-head { animation: reel-draw 0.3s 1.35s ease-out forwards; }
+.reel-callout.is-visible .reel-arrow { animation: reel-nudge 2.6s 1.9s ease-in-out infinite; }
+@keyframes reel-draw { to { stroke-dashoffset: 0; } }
+@keyframes reel-nudge { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(var(--nudge)); } }
+@media (prefers-reduced-motion: reduce) {
+  .reel-arrow path { stroke-dashoffset: 0; animation: none !important; }
+  .reel-callout .reel-arrow { animation: none !important; }
+}
 .hero-social {
   display: inline-flex;
   align-items: center;
@@ -768,111 +783,129 @@ body.nav-open .nav-toggle span::after {
   height: 1.25rem;
 }
 
-/* Professional focus panel */
-.practice-card {
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  min-height: 440px;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-  padding: clamp(1.5rem, 3vw, 2.25rem);
-  border: 1px solid rgba(255, 255, 255, 0.88);
-  border-radius: var(--r-xl);
-  background:
-    radial-gradient(90% 70% at 0% 0%, rgba(255, 255, 255, 0.8), transparent 58%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.56), rgba(220, 226, 217, 0.38));
-  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.95);
-  backdrop-filter: saturate(1.9) blur(28px);
-  -webkit-backdrop-filter: saturate(1.9) blur(28px);
-}
-.practice-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(60% 54% at 94% 10%, rgba(63, 93, 102, 0.13), transparent 64%),
-    radial-gradient(52% 42% at 4% 96%, rgba(168, 98, 63, 0.1), transparent 66%),
-    var(--grain-img);
-  background-size: auto, auto, 150px 150px;
-  opacity: 0.72;
-  pointer-events: none;
-}
-.practice-intro h2 {
-  max-width: 12ch;
-  font-family: var(--font-serif);
-  font-size: clamp(2rem, 1.5rem + 1.5vw, 3rem);
-  font-weight: 500;
-  line-height: 1.03;
-  letter-spacing: -0.025em;
-  color: var(--ink);
-}
-.practice-intro p {
-  max-width: 34ch;
-  margin-top: 0.75rem;
-  color: var(--body);
-  font-size: 0.93rem;
-  line-height: 1.55;
-}
-.practice-list {
+/* A peek at the animated portfolio: a framed print of the sketchbook (it also stands in for a portrait).
+   The footage is the night-mode site, so the frame is the same dark tone while it loads. */
+.peek {
+  justify-self: end;
+  width: min(100%, 420px);
   display: grid;
-  margin-top: clamp(1.5rem, 3vw, 2.2rem);
-}
-.practice-row {
-  display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr);
   gap: 0.7rem;
-  padding-block: 0.85rem;
-  border-top: 1px solid var(--line);
 }
-.practice-row > span {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.64rem;
-  font-weight: 600;
-  color: var(--terra-ink);
+/* the choice: two pills; the card behind them flips to the chosen version */
+.peek-switch {
+  justify-self: center;
+  display: inline-flex;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--line), var(--shadow);
 }
-.practice-row b,
-.practice-row small {
-  display: block;
-}
-.practice-row b {
-  color: var(--ink);
-  font-size: 0.95rem;
-}
-.practice-row small {
-  margin-top: 0.18rem;
-  max-width: 42ch;
+.peek-switch button {
+  font: 500 0.78rem/1 var(--font-mono);
+  letter-spacing: 0.04em;
   color: var(--muted);
-  font-size: 0.77rem;
-  line-height: 1.45;
+  background: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.55rem 0.95rem;
+  min-height: 36px;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
-.practice-footer {
+.peek-switch button[aria-pressed="true"] {
+  color: var(--cream);
+  background: var(--green);
+}
+.peek-switch button:focus-visible {
+  outline: 2px solid var(--terra-ink);
+  outline-offset: 2px;
+}
+.reel-peek {
+  display: block;
+  color: var(--ink);
+  perspective: 1600px;
+  border-radius: var(--r-lg);
+}
+.peek-inner {
+  display: grid;
+  transform-style: preserve-3d;
+  transition: transform 0.9s cubic-bezier(0.3, 1.25, 0.45, 1), translate var(--dur) var(--ease-out);
+}
+.reel-peek[data-mode="3d"] .peek-inner {
+  transform: rotateY(180deg);
+}
+.peek-side {
+  grid-area: 1 / 1;
+  display: block;
+  padding: 0.7rem 0.7rem 0;
+  background-color: var(--card);
+  background-image: var(--glass-sheen);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: box-shadow var(--dur) var(--ease);
+}
+.peek-side--3d {
+  transform: rotateY(180deg);
+}
+.reel-peek:hover .peek-inner,
+.reel-peek:focus-visible .peek-inner {
+  translate: 0 -3px;
+}
+.reel-peek:hover .peek-side,
+.reel-peek:focus-visible .peek-side {
+  box-shadow: var(--shadow-lg);
+}
+.reel-peek:focus-visible {
+  outline: 2px solid var(--terra-ink);
+  outline-offset: 4px;
+}
+.reel-peek-frame {
+  display: block;
+  aspect-ratio: 5 / 6;
+  overflow: hidden;
+  border-radius: var(--r);
+  background: #1d1a22;
+}
+.reel-peek-frame video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.reel-peek-caption {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--line);
+  padding: 0.85rem 0.45rem 0.95rem;
+}
+.reel-peek-caption > span {
+  display: grid;
+  gap: 0.2rem;
+}
+.reel-peek-eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--muted);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--terra-ink);
 }
-.practice-footer a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: var(--green);
-  font-family: var(--font-sans);
-  font-size: 0.82rem;
+.reel-peek-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
   font-weight: 600;
+  line-height: 1.1;
 }
-.practice-footer .icon {
-  width: 0.85rem;
-  height: 0.85rem;
+.reel-peek-caption .icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--green);
+  transition: transform var(--dur) var(--ease-out);
+}
+.reel-peek:hover .icon {
+  transform: translate(2px, -2px);
 }
 
 /* =========================================================================
@@ -1065,6 +1098,20 @@ body.nav-open .nav-toggle span::after {
     linear-gradient(135deg, rgba(255, 255, 255, 0.62), rgba(239, 246, 178, 0.28)),
     rgba(215, 232, 84, 0.2);
 }
+.offering-card--randoms:hover,
+.offering-card--randoms:focus,
+.offering-card--randoms:focus-within {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(229, 234, 225, 0.32)),
+    rgba(134, 174, 117, 0.18);
+}
+.offering-card--gitlines:hover,
+.offering-card--gitlines:focus,
+.offering-card--gitlines:focus-within {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(214, 238, 220, 0.3)),
+    rgba(92, 184, 118, 0.16);
+}
 .offering-card:hover::after,
 .offering-card:focus::after,
 .offering-card:focus-within::after {
@@ -1122,7 +1169,6 @@ body.nav-open .nav-toggle span::after {
   border-radius: var(--r-lg);
   padding: 0;
   box-shadow: var(--shadow);
-  outline: none;
   transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease),
     border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
 }
@@ -1138,79 +1184,99 @@ body.nav-open .nav-toggle span::after {
   opacity: 0;
   transition: opacity var(--dur) var(--ease);
 }
+/* Hover (or keyboard focus) only lifts the card; opening is a click on the summary button. */
 .pcard:hover,
-.pcard:focus,
-.pcard:focus-within {
+.pcard:has(:focus-visible) {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
   border-color: rgba(255, 255, 255, 0.96);
 }
 .pcard:hover::before,
-.pcard:focus::before,
-.pcard:focus-within::before {
+.pcard:has(:focus-visible)::before,
+.pcard.is-open::before {
   opacity: 1;
 }
 .pcard-summary {
   display: grid;
-  grid-template-columns: 2.25rem minmax(170px, 0.55fr) minmax(0, 1fr) 1.25rem;
+  grid-template-columns: 2.25rem minmax(0, 0.8fr) minmax(0, 1fr) 1.25rem;
   align-items: center;
   gap: clamp(0.7rem, 1.6vw, 1.25rem);
+  width: 100%;
   min-height: 72px;
   padding: 0.9rem 1.2rem;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: normal;
+  text-align: left;
 }
-.pcard-summary h3 {
-  margin: 0;
+.pcard-summary:focus-visible {
+  outline-offset: -4px;
+  border-radius: calc(var(--r-lg) - 2px);
+}
+.pcard-title,
+.pcard-line {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
+}
+.pcard-title {
   font-family: var(--font-serif);
   font-size: clamp(1.18rem, 1rem + 0.55vw, 1.48rem);
   font-weight: 600;
-  line-height: 1.05;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.08;
 }
-.pcard-summary p {
-  overflow: hidden;
+.pcard-line {
   color: var(--muted);
   font-size: 0.88rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .pcard-toggle {
   display: grid;
   place-items: center;
   color: var(--green);
-  transition: transform 160ms var(--ease-out);
+  transition: transform var(--dur) var(--ease-out);
 }
 .pcard-toggle .icon {
   width: 1rem;
   height: 1rem;
 }
-.pcard:hover .pcard-toggle,
-.pcard:focus .pcard-toggle,
-.pcard:focus-within .pcard-toggle {
+.pcard.is-open .pcard-toggle {
   transform: rotate(180deg);
 }
+/* Details slide open by animating the row from 0fr to 1fr while the content fades.
+   Collapsed only when JS runs, so without it every card simply shows its details. */
 .pcard-expand {
-  display: none;
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 420ms var(--ease-out);
+}
+.js .pcard-expand {
+  grid-template-rows: 0fr;
+}
+.js .pcard.is-open .pcard-expand {
+  grid-template-rows: 1fr;
+}
+.pcard-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.pcard-details {
+  display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
   gap: 0 clamp(1.6rem, 4vw, 3.5rem);
   padding: 0 clamp(1.2rem, 3vw, 2rem) clamp(1.2rem, 3vw, 2rem);
 }
-.pcard:hover .pcard-expand,
-.pcard:focus .pcard-expand,
-.pcard:focus-within .pcard-expand {
-  display: grid;
-  animation: pcard-details-in 160ms var(--ease-out) both;
+/* hidden after closing so the links inside cannot be tabbed to while collapsed */
+.js .pcard-details {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 200ms var(--ease), visibility 0s linear 420ms;
 }
-@keyframes pcard-details-in {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+.js .pcard.is-open .pcard-details {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 320ms var(--ease) 80ms, visibility 0s;
 }
 .pcard-body {
   display: flex;
@@ -1465,6 +1531,63 @@ body.nav-open .nav-toggle span::after {
   width: 0.42rem;
   height: 1px;
   background: var(--terra-soft);
+}
+
+/* =========================================================================
+   Side gigs: one small linked card per gig
+   ========================================================================= */
+
+.gig-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: clamp(1rem, 2vw, 1.4rem);
+}
+.gig-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: clamp(1.25rem, 2.4vw, 1.7rem);
+  border-radius: var(--r-lg);
+  transition: opacity var(--dur-rev) var(--ease-out), transform var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease);
+}
+.gig-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+.gig-role {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--terra-ink);
+}
+.gig-card h3 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 1.25rem + 0.8vw, 1.9rem);
+  line-height: 1.05;
+}
+.gig-card p {
+  color: var(--body);
+  font-size: 0.95rem;
+}
+.gig-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--green);
+}
+.gig-go .icon {
+  width: 1rem;
+  height: 1rem;
+  transition: transform var(--dur) var(--ease-out);
+}
+.gig-card:hover .gig-go .icon {
+  transform: translate(2px, -2px);
 }
 
 /* =========================================================================
@@ -2269,6 +2392,7 @@ body::before {
 #contact {
   position: relative;
   isolation: isolate;
+  overflow-x: clip; /* the blooms reach past the screen edge, which widens the page on phones */
 }
 #work::before {
   content: "";
@@ -2354,6 +2478,7 @@ body::before {
 /* ---- Vibrancy: frosted glass across the card surfaces ------------------ */
 .skill-card,
 .xp,
+.gig-card,
 .edu-card,
 .profile-card,
 .pub,
@@ -2426,8 +2551,19 @@ body::before {
     grid-template-columns: 1fr;
     gap: 2.75rem;
   }
-  .practice-card {
-    max-width: 460px;
+  .peek {
+    justify-self: start;
+  }
+  .reel-callout {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .reel-arrow--side {
+    display: none;
+  }
+  .reel-arrow--down {
+    display: block;
   }
   .solution-card {
     grid-template-columns: 1fr;
@@ -2474,7 +2610,7 @@ body::before {
     transform: translateY(8px);
   }
   .js .hero-copy > .reveal,
-  .js .practice-card.reveal,
+  .js .peek.reveal,
   .js .hero-title.reveal {
     opacity: 1;
     transform: none;
@@ -2518,6 +2654,22 @@ body::before {
     background:
       linear-gradient(135deg, rgba(255, 255, 255, 0.62), rgba(239, 246, 178, 0.28)),
       rgba(215, 232, 84, 0.2);
+  }
+  .offering-card--randoms,
+  .offering-card--randoms:hover,
+  .offering-card--randoms:focus,
+  .offering-card--randoms:focus-within {
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(229, 234, 225, 0.32)),
+      rgba(134, 174, 117, 0.18);
+  }
+  .offering-card--gitlines,
+  .offering-card--gitlines:hover,
+  .offering-card--gitlines:focus,
+  .offering-card--gitlines:focus-within {
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(214, 238, 220, 0.3)),
+      rgba(92, 184, 118, 0.16);
   }
   .offering-logo-stage {
     min-height: 154px;
@@ -2585,7 +2737,8 @@ body::before {
   }
 }
 
-@media (hover: none) and (min-width: 761px) {
+/* Touch screens, and desktops too narrow for the expanding hover row. */
+@media (hover: none) and (min-width: 761px), (min-width: 761px) and (max-width: 1120px) {
   .offerings-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2620,6 +2773,22 @@ body::before {
       linear-gradient(135deg, rgba(255, 255, 255, 0.62), rgba(239, 246, 178, 0.28)),
       rgba(215, 232, 84, 0.2);
   }
+  .offering-card--randoms,
+  .offering-card--randoms:hover,
+  .offering-card--randoms:focus,
+  .offering-card--randoms:focus-within {
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(229, 234, 225, 0.32)),
+      rgba(134, 174, 117, 0.18);
+  }
+  .offering-card--gitlines,
+  .offering-card--gitlines:hover,
+  .offering-card--gitlines:focus,
+  .offering-card--gitlines:focus-within {
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(214, 238, 220, 0.3)),
+      rgba(92, 184, 118, 0.16);
+  }
   .offering-logo-stage {
     min-height: 170px;
     padding: 1.5rem;
@@ -2637,21 +2806,22 @@ body::before {
   .offering-hint {
     display: none;
   }
-  .practice-card {
-    min-height: 0;
-  }
+}
+
+/* Touch screens and phones: a compact summary row (tap opens it, same as a click). */
+@media (hover: none), (max-width: 760px) {
   .pcard-summary {
     grid-template-columns: 1.8rem minmax(0, 1fr) 1rem;
     min-height: 64px;
     padding: 0.8rem 1rem;
   }
-  .pcard-summary p {
+  .pcard-line {
     display: none;
   }
-  .pcard-summary h3 {
+  .pcard-title {
     font-size: 1.16rem;
   }
-  .pcard-expand {
+  .pcard-details {
     grid-template-columns: 1fr;
     gap: 1rem;
     padding: 0 1rem 1rem;
@@ -2713,4 +2883,55 @@ body::before {
     opacity: 1 !important;
     transform: none !important;
   }
+  .pcard-expand,
+  .pcard-details {
+    transition: none !important;
+  }
 }
+
+/* =========================================================================
+   Leaving for an animated version: the page crumples into a ball (2D) or voxel cubes rain down (3D)
+   ========================================================================= */
+/* The crumple moves the body itself (site.ts exit2d) over a black screen. The body carries the page's own background
+   while it moves, and since a transformed body holds its fixed layers, they are pinned back over the visible screen
+   (--cy is the scroll offset and --ch the screen height when it started). */
+html.crumpling {
+  background: #000;
+}
+html.crumpling body {
+  background: linear-gradient(180deg, #f0f2e9 0%, var(--bg) 26%, var(--bg-2) 100%) 0 var(--cy) / 100% var(--ch) no-repeat var(--bg);
+  will-change: transform;
+  pointer-events: none;
+}
+html.crumpling body::before {
+  position: absolute;
+  inset: auto;
+  left: -25%;
+  top: calc(var(--cy) - var(--ch) * 0.25);
+  width: 150%;
+  height: calc(var(--ch) * 1.5);
+}
+html.crumpling body::after {
+  position: absolute;
+  inset: auto;
+  left: 0;
+  top: var(--cy);
+  width: 100%;
+  height: var(--ch);
+}
+html.crumpling .topbar {
+  translate: 0 var(--cy);
+}
+.crease {
+  position: absolute;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+}
+.exit-3d {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+}
+.exit-3d canvas { width: 100%; height: 100%; display: block; }

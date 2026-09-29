@@ -14,7 +14,7 @@ export const profile = {
   degree: "Integrated B.A. (Mod.) & MSc Computer Science, Trinity College Dublin",
   degreeNote: "Overall distinction",
   cvPath: "Yuuv_Jauhari_Resume.pdf",
-  lastUpdated: "August 2026",
+  lastUpdated: "September 2026",
 };
 
 export const targetRoles = [
@@ -237,6 +237,23 @@ export const education: Education[] = [
   },
 ];
 
+// Things run alongside the main work. Each card links out to the gig's own site.
+export type SideGig = {
+  org: string;
+  role: string;
+  blurb?: string;
+  url: string;
+};
+
+export const sideGigs: SideGig[] = [
+  {
+    org: "E.T.S Consulting Services",
+    role: "Founding Engineer",
+    blurb: "ESG and operational-change consultancy. I run its tech.",
+    url: "https://www.etsconsulting.in/",
+  },
+];
+
 export type ProjectLink = {
   label: string;
   url: string;
@@ -430,24 +447,24 @@ export const projects: Project[] = [
     links: [{ label: "View on GitHub", url: "https://github.com/yjay18/personaforge", kind: "repo" }],
   },
   {
-    slug: "interactive-portfolio",
-    title: "Interactive Portfolio",
-    eyebrow: "Animated 2D World",
-    subtitle: "A side-scrolling town where each building is a project, with in-world product demos and sprites.",
+    slug: "sketchbook-portfolio",
+    title: "Sketchbook Portfolio",
+    eyebrow: "Animated Scroll Site",
+    subtitle: "The animated version of this portfolio: a painted me pulls the paper off each project as you scroll.",
     summary:
-      "A playable portfolio built as an animated 2D side-scrolling town. Each building is a project, complete with in-world product demos and pixel sprites.",
+      "A hand-painted, scroll-driven portfolio where a painted character tears or peels the paper off each project, a paper dragon keeps him company, and the research opens as a 3D pop-up book.",
     flagship: true,
     categories: ["Web"],
     roleFit: ["Frontend", "Creative / Interactive"],
     detail:
-      "An earlier, more playful take on this portfolio, built as an animated 2D side-scrolling town. Each project is its own building you can walk to, complete with in-world product demos and pixel sprites. Deployed on Vercel; this static site is the current, primary version.",
-    stack: ["Web", "2D side-scroller", "Sprite art", "Animation"],
+      "The animated companion to this site. The character's moves, the paper dragon and the scenery are painted in code with p5.brush and played back as sprites. Scrolling drives each paper reveal, the sky runs from morning to night down the page, the research chapter is a three.js pop-up book, and a lamp cord switches the page to dark mode. All of its content comes from one data file.",
+    stack: ["JavaScript", "Canvas", "three.js", "p5.brush", "CSS"],
     impact: [
-      "Built as an animated 2D side-scrolling town, with a building for each project.",
-      "In-world product demos and pixel sprites you can explore.",
-      "Deployed on Vercel.",
+      "Scroll-scrubbed reveals: a painted character hauls a cord to tear or peel open each project.",
+      "A three.js pop-up book for the research, with drag to rotate and clickable pages.",
+      "Character, dragon and scenery painted in code, with dark mode and reduced-motion support.",
     ],
-    externalUrl: "https://portfolio-website-lake-zeta-65.vercel.app/",
+    externalUrl: "reel/",
   },
   {
     slug: "jemdash",
@@ -467,6 +484,25 @@ export const projects: Project[] = [
       "Works with local projects as well as remote machines over SSH/SFTP.",
     ],
     links: [{ label: "View on GitHub", url: "https://github.com/yjay18/Jemdash", kind: "repo" }],
+  },
+  {
+    slug: "labs-studio-portal",
+    title: "_ labs Studio Portal",
+    eyebrow: "Full-Stack Storefront",
+    subtitle: "The storefront and account console for a small independent software studio.",
+    summary:
+      "A Next.js and Supabase storefront with Free and Priced collections, protected user, developer and admin workspaces, and the activation check-in used by desktop apps.",
+    categories: ["Web", "Systems"],
+    roleFit: ["Software Engineering", "Full-stack"],
+    detail:
+      "The home and storefront for a small independent software studio. One account can gain user, developer or admin capabilities, each checked on the server by immutable user ID. Desktop apps connect through a state-bound activation flow and a hashed check-in credential, while customer work stays on the desktop.",
+    stack: ["Next.js", "React", "TypeScript", "Supabase", "Postgres row-level security", "Vercel"],
+    impact: [
+      "Free and Priced collections, with product pages that keep each app's own colour environment.",
+      "User, developer and admin workspaces authorised on the server by immutable user ID.",
+      "Desktop activation with state-bound codes, hashed long-lived credentials and owner-revocable devices.",
+    ],
+    externalUrl: "https://studio-portal-flax-pi.vercel.app/",
   },
   {
     slug: "emoji-sentiment-stability",
@@ -506,6 +542,25 @@ export const projects: Project[] = [
     links: [{ label: "View on GitHub", url: "https://github.com/yjay18/LoraResearch", kind: "repo" }],
   },
   {
+    slug: "polyner",
+    title: "PolyNER",
+    eyebrow: "NLP Library",
+    subtitle: "A Python library for named entity recognition across mixed languages and emojis.",
+    summary:
+      "A multilingual NER library that detects each snippet's language, keeps emojis as their own tokens, and returns tokens, languages and entities as one structured table.",
+    categories: ["NLP"],
+    roleFit: ["NLP Engineer", "Software Engineering"],
+    detail:
+      "A Python library for multilingual Named Entity Recognition. It detects the language of each text snippet, separates emojis into their own tokens, normalises the text, and organises tokens, languages, emojis and recognised entities into structured columns. Custom NER models or dictionaries can be loaded in place of the defaults.",
+    stack: ["Python", "spaCy", "Hugging Face Transformers", "pandas"],
+    impact: [
+      "Per-snippet language detection with emoji-aware tokenisation.",
+      "Structured output of tokens, languages, emojis and recognised entities.",
+      "Extensible with custom NER models or dictionaries, covered by unit tests.",
+    ],
+    links: [{ label: "View on GitHub", url: "https://github.com/yjay18/PolyNER", kind: "repo" }],
+  },
+  {
     slug: "kundl-ai",
     title: "kundl.ai",
     eyebrow: "Client-Side Web App",
@@ -521,24 +576,6 @@ export const projects: Project[] = [
       "Computes sidereal charts fully client-side: planetary positions, lagna, nakshatras, bhavas, and Vimshottari mahadasha.",
       "Separated the calculation engine from the UI for reuse and testing.",
       "Added an optional Python backend for higher-grade ephemeris support.",
-    ],
-  },
-  {
-    slug: "ets-consulting",
-    title: "ETS Consulting Site",
-    eyebrow: "React Marketing Site",
-    subtitle: "A marketing site for E.T.S Consulting Services with a custom design system and serverless contact flow.",
-    summary:
-      "A marketing site for E.T.S Consulting Services, built in React and Vite with a custom CSS design system, responsive layout, and subtle motion.",
-    categories: ["Web"],
-    roleFit: ["Web", "Frontend"],
-    detail:
-      "A marketing site for E.T.S Consulting Services, built in React and Vite with a custom CSS design system, responsive layout, and subtle motion. The contact flow runs locally via Express or in production through a Vercel serverless API with optional Redis queuing.",
-    stack: ["React", "Vite", "CSS", "Express", "Vercel", "Redis"],
-    impact: [
-      "Built in React and Vite with a custom CSS design system, responsive layout, and subtle motion.",
-      "Contact flow runs locally via Express or in production through a Vercel serverless API.",
-      "Added optional Redis queuing for contact submissions.",
     ],
   },
   {

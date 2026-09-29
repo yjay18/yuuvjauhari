@@ -14,56 +14,64 @@ const repoLink = project.links?.find((link) => link.kind === "repo");
 const supportingLinks = project.links?.filter((link) => link !== repoLink);
 const linkIcon = (kind: string) =>
   kind === "repo" ? "github" : kind === "paper" || kind === "thesis" || kind === "writeup" ? "file" : "arrow-up-right";
+const panelId = `pcard-${project.slug}`;
 ---
 
-<article class="pcard reveal" tabindex="0">
-  <div class="pcard-summary">
-    <span class="pcard-index">{String(index + 1).padStart(2, "0")}</span>
-    <h3>{project.title}</h3>
-    <p>{project.subtitle ?? project.summary}</p>
-    <span class="pcard-toggle" aria-hidden="true"><Icon name="arrow-down" /></span>
-  </div>
+<article class="pcard reveal">
+  <h3 class="pcard-heading">
+    <button type="button" class="pcard-summary" aria-expanded="false" aria-controls={panelId}>
+      <span class="pcard-index">{String(index + 1).padStart(2, "0")}</span>
+      <span class="pcard-title">{project.title}</span>
+      <span class="pcard-line">{project.subtitle ?? project.summary}</span>
+      <span class="pcard-toggle" aria-hidden="true"><Icon name="arrow-down" /></span>
+    </button>
+  </h3>
 
-  <div class="pcard-expand">
-    <div class="pcard-head">
-      <span class="pcard-eyebrow">{project.eyebrow}</span>
-      <p class="pcard-sub">{project.subtitle ?? project.summary}</p>
-      {project.roleFit && (
-        <ul class="rolefit" aria-label="Role fit">
-          {project.roleFit.map((r) => <li class="chip chip--role">{r}</li>)}
-        </ul>
-      )}
-    </div>
+  <!-- expand wrapper animates its row 0fr to 1fr; inner clips; details carry the layout and fade -->
+  <div class="pcard-expand" id={panelId}>
+    <div class="pcard-inner">
+      <div class="pcard-details">
+        <div class="pcard-head">
+          <span class="pcard-eyebrow">{project.eyebrow}</span>
+          <p class="pcard-sub">{project.subtitle ?? project.summary}</p>
+          {project.roleFit && (
+            <ul class="rolefit" aria-label="Role fit">
+              {project.roleFit.map((r) => <li class="chip chip--role">{r}</li>)}
+            </ul>
+          )}
+        </div>
 
-    <div class="pcard-body">
-      <div class="pcard-proof-panel">
-        <span class="pcard-panel-label">Proof</span>
-        <ul class="pcard-proof">
-          {proof.map((p) => <li>{p}</li>)}
-        </ul>
+        <div class="pcard-body">
+          <div class="pcard-proof-panel">
+            <span class="pcard-panel-label">Proof</span>
+            <ul class="pcard-proof">
+              {proof.map((p) => <li>{p}</li>)}
+            </ul>
+          </div>
+          <ul class="tags" aria-label="Stack">
+            {project.stack.slice(0, 6).map((s) => <li>{s}</li>)}
+          </ul>
+        </div>
+
+        <div class="pcard-links">
+          {repoLink ? (
+            <a class="case-link" href={resolveUrl(repoLink.url)} target="_blank" rel="noreferrer">
+              <Icon name="github" /> View on GitHub
+            </a>
+          ) : null}
+          {!repoLink && project.externalUrl && (
+            <a class="case-link" href={resolveUrl(project.externalUrl)} target="_blank" rel="noreferrer">
+              <Icon name="arrow-up-right" /> Visit project
+            </a>
+          )}
+          {supportingLinks?.map((link) => (
+            <a class="ext-link" href={resolveUrl(link.url)} target="_blank" rel="noreferrer">
+              <Icon name={linkIcon(link.kind)} />
+              {link.label}
+            </a>
+          ))}
+        </div>
       </div>
-      <ul class="tags" aria-label="Stack">
-        {project.stack.slice(0, 6).map((s) => <li>{s}</li>)}
-      </ul>
-    </div>
-
-    <div class="pcard-links">
-      {repoLink ? (
-        <a class="case-link" href={resolveUrl(repoLink.url)} target="_blank" rel="noreferrer">
-          <Icon name="github" /> View on GitHub
-        </a>
-      ) : null}
-      {!repoLink && project.externalUrl && (
-        <a class="case-link" href={project.externalUrl} target="_blank" rel="noreferrer">
-          <Icon name="arrow-up-right" /> Visit project
-        </a>
-      )}
-      {supportingLinks?.map((link) => (
-        <a class="ext-link" href={resolveUrl(link.url)} target="_blank" rel="noreferrer">
-          <Icon name={linkIcon(link.kind)} />
-          {link.label}
-        </a>
-      ))}
     </div>
   </div>
 </article>

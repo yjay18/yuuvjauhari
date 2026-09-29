@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yuuv Jauhari · Sketchbook</title>
+<meta name="description" content="Yuuv Jauhari's work, unwrapped by a painted version of him: tear the paper off each project and click what's underneath.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<link rel="preload" href="sprites/manifest.json" as="fetch" crossorigin>
+<script>
+  // lights off by default; a saved lamp setting wins. Applied before first paint so the page never flashes the wrong theme
+  (function () { let t = null; try { t = localStorage.getItem('reel-theme'); } catch (e) {} document.documentElement.dataset.theme = t === 'light' ? 'light' : 'dark'; })();
+  // arriving through the portfolio's 2D door: the screen stays black until the sketchbook opens (js/arrive.js), and is
+  // never left dark if that doesn't happen
+  (function () {
+    var from = null; try { from = sessionStorage.getItem('yj-arrive'); if (from) sessionStorage.removeItem('yj-arrive'); } catch (e) {}
+    if (from !== '2d' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var d = document.documentElement; d.classList.add('arriving');
+    setTimeout(function () { d.classList.remove('arriving', 'book'); ['book', 'book-under'].forEach(function (id) { var b = document.getElementById(id); if (b) b.remove(); }); }, 5000);
+  })();
+</script>
+<script type="module" src="js/main.js"></script>
+<script type="module" src="js/arrive.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <a class="mark" href="#main" aria-label="Back to the top">YJ</a>
+  <a class="short" href="../">Prefer the short version?</a>
+</header>
+
+<canvas id="doodles" aria-hidden="true"></canvas>
+<canvas id="ink" aria-hidden="true"></canvas>
+<canvas id="inkfront" aria-hidden="true"></canvas>
+<div id="turn" aria-hidden="true">
+  <div class="turn-page">
+    <div class="turn-shade"></div>
+    <h2 class="turn-title"></h2>
+    <svg class="turn-line" viewBox="0 0 400 24" preserveAspectRatio="none"><path pathLength="100" d="M6 15 C 80 6, 150 20, 230 12 S 350 7, 394 14" /></svg>
+    <p class="turn-lede"></p>
+  </div>
+</div>
+<div id="fxlayer">
+  <div id="dragon" aria-hidden="true"><span class="sprite"></span></div>
+  <button id="cord" type="button" aria-pressed="false" aria-label="Pull the lamp cord to turn the lights off"></button>
+  <p class="cord-note" aria-hidden="true">pull for lights out</p>
+</div>
+
+<div id="lane">
+  <button id="guide" type="button" aria-label="Poke painted Yuuv"><span class="sprite"></span></button>
+  <nav id="pages" aria-label="Research pages" hidden></nav>
+</div>
+
+<main id="main">
+  <section class="hero col" aria-labelledby="name">
+    <h1 id="name" class="hard"><span class="hand" aria-hidden="true"></span><span class="crisp"></span></h1>
+    <p class="line"></p>
+    <p class="sub"></p>
+    <p class="based">
+      <svg class="clover" viewBox="-30 -30 60 64" aria-hidden="true">
+        <path class="clover-stem" d="M0 2 Q 4 16 12 26" />
+        <g class="clover-leaves">
+          <path class="leaf" d="M0 0 C -2 -6 -12 -8 -12 -16 C -12 -22 -4 -24 0 -18 C 4 -24 12 -22 12 -16 C 12 -8 2 -6 0 0 Z" />
+          <path class="leaf" transform="rotate(-115)" d="M0 0 C -2 -6 -12 -8 -12 -16 C -12 -22 -4 -24 0 -18 C 4 -24 12 -22 12 -16 C 12 -8 2 -6 0 0 Z" />
+          <path class="leaf" transform="rotate(115)" d="M0 0 C -2 -6 -12 -8 -12 -16 C -12 -22 -4 -24 0 -18 C 4 -24 12 -22 12 -16 C 12 -8 2 -6 0 0 Z" />
+        </g>
+      </svg>
+      <span></span>
+    </p>
+    <p class="note" aria-hidden="true">that's me. roughly.</p>
+  </section>
+
+  <div id="chapters"></div>
+
+  <section class="contact col" id="contact" aria-labelledby="contact-title">
+    <h2 id="contact-title" class="hard"><span class="hand" aria-hidden="true">Say hello</span><span class="crisp">Say hello</span></h2>
+    <p class="lede">Send me the messy problem. I like those.</p>
+    <p class="mail"><a data-email></a></p>
+    <p class="actions">
+      <a class="btn primary" data-cv>Read the CV</a>
+      <a class="btn" data-github target="_blank" rel="noreferrer">GitHub</a>
+      <a class="btn" data-linkedin target="_blank" rel="noreferrer">LinkedIn</a>
+    </p>
+    <p class="alt"><a data-recruiter>Prefer the short version? The clean portfolio is here.</a></p>
+  </section>
+</main>
+
+<dialog id="detail" aria-labelledby="detail-title">
+  <form method="dialog"><button class="close" aria-label="Close">Close</button></form>
+  <p class="kicker"></p>
+  <h3 id="detail-title"></h3>
+  <p class="metric"></p>
+  <p class="blurb"></p>
+  <p class="more"></p>
+  <ul class="tags"></ul>
+  <p class="actions"></p>
+</dialog>
+</body>
+</html>
