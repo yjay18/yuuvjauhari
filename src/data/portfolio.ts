@@ -120,7 +120,7 @@ export type Experience = {
 export const experience: Experience[] = [
   {
     year: "2026",
-    role: "Forward Deployed Full-Stack Engineering Intern",
+    role: "Forward Deployed Fullstack Engineering Intern",
     company: "PayPathIQ",
     period: "Aug 2026 - Sep 2026",
     location: "Dublin, Ireland",
