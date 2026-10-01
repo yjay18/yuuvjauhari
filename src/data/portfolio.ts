@@ -14,7 +14,7 @@ export const profile = {
   degree: "Integrated B.A. (Mod.) & MSc Computer Science, Trinity College Dublin",
   degreeNote: "Overall distinction",
   cvPath: "Yuuv_Jauhari_Resume.pdf",
-  lastUpdated: "September 2026",
+  lastUpdated: "October 2026",
 };
 
 export const targetRoles = [
@@ -118,6 +118,16 @@ export type Experience = {
 };
 
 export const experience: Experience[] = [
+  {
+    year: "2026",
+    role: "Forward Deployed Full-Stack Engineering Intern",
+    company: "PayPathIQ",
+    period: "Aug 2026 - Sep 2026",
+    location: "Dublin, Ireland",
+    tag: "Full-stack · Workflows · Payments",
+    summary:
+      "Built the workflow engine and workflow builder for CasePath IQ, a legal case tool for debt recovery, with CSV intake triage, a matter workspace and dashboards scoped to each client, and added a shared payment provider interface with safe local testing to PayPathIQ.",
+  },
   {
     year: "2025",
     role: "NLP Data Scientist",
