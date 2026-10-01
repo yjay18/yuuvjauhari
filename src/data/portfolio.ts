@@ -126,7 +126,7 @@ export const experience: Experience[] = [
     location: "Dublin, Ireland",
     tag: "Full-stack · Workflows · Payments",
     summary:
-      "Built the workflow engine and workflow builder for CasePath IQ, a legal case tool for debt recovery, with CSV intake triage, a matter workspace and dashboards scoped to each client, and added a shared payment provider interface with safe local testing to PayPathIQ.",
+      "Deployed on site at a law firm, working with its executives to design CasePath IQ, a debt recovery case tool, around how they actually run cases. Built its workflow engine and builder, CSV intake triage, matter workspace and client-scoped dashboards, and added a shared payment provider interface to PayPathIQ.",
   },
   {
     year: "2025",
